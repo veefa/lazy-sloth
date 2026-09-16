@@ -1,1 +1,19 @@
 @import "tailwindcss";
+
+@theme {
+
+  --color-warm-ivory: #FAF7F2;
+
+  --color-warm-taupe: #D8CEC3;
+
+  --color-taupe-light: #E8E0D8;
+
+  --color-taupe-dark: #8A7E73;
+
+  --color-terracotta: #C96F4A;
+
+  --color-olive: #6F7258;
+
+  --color-coffee: #4A382E;
+
+}
