@@ -1,7 +1,5 @@
 import React from "react";
 
-
-
 const Home: React.FC = () => {
   return (
     <main className="flex h-dvh flex-col overflow-hidden">
@@ -16,10 +14,8 @@ const Home: React.FC = () => {
         <h1 className="m-8 font-bold text-4xl text-olive-600 sm:text-5xl">
           Lazzzy Schedule
         </h1>
-        <p className="mb-3 max-w-xl text-center text-taupe-800 text-sm sm:text-base">
-          Welcome to the Lazy Schedule App! Effortlessly organize your tasks.
-        </p>
-        <p className="mx-auto mb-10 max-w-xl text-taupe-700 text-sm sm:text-base md:mx-0 text-center">
+
+        <p className="mx-auto mb-10 max-w-xl text-olive text-sm sm:text-base md:mx-0 text-center">
           Sometimes, planning our day feels more exhausting than actually living
           it. so let's make it Lazy
         </p>
