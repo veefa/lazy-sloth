@@ -68,7 +68,7 @@ const SidebarIcon: React.FC<{ name: IconName }> = ({ name }) => {
 
 const links: { to: string; label: string; icon: IconName }[] = [
   { to: "/lazy-schedule", label: "Schedule", icon: "schedule" },
-  { to: "/Calendar   ", label: "Calendar", icon: "calendar" },
+  { to: "/calendar", label: "Calendar", icon: "calendar" },
   { to: "/productivity", label: "Productivity", icon: "productivity" },
   { to: "/tasks-manager", label: "TaskManager", icon: "tasksmanager" },
 ];

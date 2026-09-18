@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar.tsx";
 import LazySchedulePage from "./pages/LazySchedulePage.tsx";
 import ProductivityPage from "./pages/ProductivityPage.tsx";
 import TasksManager from "./pages/TaskManager.tsx";
+import CalendarPage from "./pages/CalendarPage.tsx";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/lazy-schedule" element={<LazySchedulePage />} />
           <Route path="/productivity" element={<ProductivityPage />} />
+          <Route path="/calendar" element={<CalendarPage />} />
           <Route path="/tasks-manager" element={<TasksManager />} />
         </Routes>
       </div>
