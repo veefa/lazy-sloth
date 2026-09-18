@@ -70,7 +70,7 @@ const links: { to: string; label: string; icon: IconName }[] = [
   { to: "/lazy-schedule", label: "Schedule", icon: "schedule" },
   { to: "/Calendar   ", label: "Calendar", icon: "calendar" },
   { to: "/productivity", label: "Productivity", icon: "productivity" },
-  { to: "/Tasksmanager   ", label: "Tasksmanager", icon: "tasksmanager" },
+  { to: "/tasks-manager", label: "TaskManager", icon: "tasksmanager" },
 ];
 
 const logLink = { to: "/log", label: "Log", icon: "log" as IconName };
