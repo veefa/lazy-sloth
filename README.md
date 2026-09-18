@@ -17,59 +17,45 @@ If you are developing a production application, we recommend updating the config
 
 ```js
 export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+  # Lazy Schedule
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+  Lazy Schedule is a React time-planning app built around a 24-hour FaceClock. Add tasks to the clock, adjust their time blocks, and manage them from the task manager and calendar views.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+  ## Features
 
-```
+  - Create and schedule tasks on the FaceClock
+  - Drag and resize task time blocks
+  - Organize tasks by category
+  - Mark tasks complete or delete them
+  - Persist tasks in browser local storage
+  - View saved tasks in a calendar overview
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+  ## Routes
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+  - `/` Home
+  - `/lazy-schedule` FaceClock schedule
+  - `/calendar` Calendar
+  - `/tasks-manager` Task manager
+  - `/productivity` Productivity
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
+  ## Getting Started
+
+  ```bash
+  npm install
+  npm run dev
+  ```
+
+  Open the local URL shown by Vite.
+
+  ## Commands
+
+  ```bash
+  npm run build    # Type-check and create a production build
+  npm run lint     # Run ESLint
+  npm run preview  # Preview the production build
+  ```
+
+  ## Stack
+
+  React, TypeScript, Vite, React Router, and Tailwind CSS.
       reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
