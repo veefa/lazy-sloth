@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ClockHand from "./ClockHands";
 import TimeBlockArc from "./TimeBlockArc";
+import { useTheme } from "./theme";
 import {
   addTask,
   categories,
@@ -36,6 +37,8 @@ const FaceClock: React.FC = () => {
   const [newTask, setNewTask] = useState<DraftTask>(initialDraft);
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
   const [dragState, setDragState] = useState<DragState | null>(null);
+  const { theme } = useTheme();
+  const isNight = theme === "night";
 
   useEffect(() => {
     const interval = window.setInterval(() => setTime(new Date()), 1000);
@@ -45,11 +48,12 @@ const FaceClock: React.FC = () => {
   const centerX = 200;
   const centerY = 200;
   const radius = 190;
-  const INDIGO_DARK = "#1e3a8a";
-  const INDIGO = "#e0e7ff";
-  const INDIGO_LIGHT = "#818cf8";
-  const SLATE_DARK = "#334155";
-  const INDIGO_MEDIUM = "#4f46e5";
+  const CLOCK_STROKE = isNight ? "#FAF7F2" : "#6F7258";
+  const CLOCK_FACE = isNight ? "#6F7258" : "#E8E0D8";
+  const CLOCK_TICK = isNight ? "#D8CEC3" : "#8A7E73";
+  const HOUR_HAND = isNight ? "#FAF7F2" : "#4A382E";
+  const MINUTE_HAND = "#C96F4A";
+  const taskTextColor = isNight ? "#FAF7F2" : "#4A382E";
 
   const handleAddTask = () => {
     if (
@@ -135,8 +139,8 @@ const FaceClock: React.FC = () => {
         <svg
           viewBox="0 0 400 400"
           xmlns="http://www.w3.org/2000/svg"
-          className="aspect-square w-full max-w-[420px] self-center touch-none rounded-full md:w-1/2"
-          style={{ background: INDIGO }}
+          className="aspect-square w-full max-w-105 self-center touch-none rounded-full md:w-1/2"
+          style={{ background: CLOCK_FACE }}
           onPointerMove={handlePointerMove}
           onPointerUp={() => setDragState(null)}
           onPointerCancel={() => setDragState(null)}>
@@ -144,8 +148,8 @@ const FaceClock: React.FC = () => {
             cx={centerX}
             cy={centerY}
             r={radius}
-            fill={INDIGO}
-            stroke={INDIGO_DARK}
+            fill={CLOCK_FACE}
+            stroke={CLOCK_STROKE}
             strokeWidth="7"
           />
           {[...Array(24)].map((_, i) => {
@@ -159,12 +163,12 @@ const FaceClock: React.FC = () => {
                 dominantBaseline="middle"
                 fontWeight={i % 6 === 0 ? "bold" : "normal"}
                 fontSize={i % 6 === 0 ? 15 : 11}
-                fill={INDIGO_DARK}>
+                fill={CLOCK_STROKE}>
                 {i}
               </text>
             );
           })}
-          <g stroke={INDIGO_LIGHT} strokeWidth="2">
+          <g stroke={CLOCK_TICK} strokeWidth="2">
             {Array.from({ length: 24 }).map((_, i) => {
               const angle = (i * Math.PI) / 12 - Math.PI / 2;
               return (
@@ -205,7 +209,7 @@ const FaceClock: React.FC = () => {
                   dominantBaseline="middle"
                   fontSize="13"
                   fontWeight="bold"
-                  fill="#1e3a8a"
+                  fill={taskTextColor}
                   pointerEvents="none">
                   {task.name}
                 </text>
@@ -215,7 +219,7 @@ const FaceClock: React.FC = () => {
                     cy={centerY + Math.sin(endAngle) * arcRadius}
                     r="8"
                     fill="#fff"
-                    stroke="#1e3a8a"
+                    stroke={CLOCK_STROKE}
                     strokeWidth="3"
                     className="cursor-ew-resize"
                     onPointerDown={(event) => startResize(event, task)}
@@ -228,7 +232,7 @@ const FaceClock: React.FC = () => {
             angle={hourAngle}
             length={100}
             width={3}
-            color={SLATE_DARK}
+            color={HOUR_HAND}
             centerX={centerX}
             centerY={centerY}
           />
@@ -236,11 +240,11 @@ const FaceClock: React.FC = () => {
             angle={minuteAngle}
             length={140}
             width={2}
-            color={INDIGO_MEDIUM}
+            color={MINUTE_HAND}
             centerX={centerX}
             centerY={centerY}
           />
-          <circle cx={centerX} cy={centerY} r={7} fill={INDIGO_MEDIUM} />
+          <circle cx={centerX} cy={centerY} r={7} fill={MINUTE_HAND} />
         </svg>
 
         <section
@@ -249,7 +253,7 @@ const FaceClock: React.FC = () => {
           {isOverloaded && (
             <div
               role="alert"
-              className="rounded-lg border border-red-300 bg-red-50 p-3 text-sm text-red-800">
+              className={`rounded-lg border border-terracotta p-3 text-sm ${isNight ? "bg-olive text-warm-taupe" : "bg-taupe-light text-olive"}`}>
               <p className="font-semibold">Overload warning</p>
               <p className="mt-1">
                 You have {scheduledHours.toFixed(1)} hours of scheduled tasks.
@@ -257,64 +261,81 @@ const FaceClock: React.FC = () => {
               </p>
             </div>
           )}
-          <div className="rounded-lg border border-indigo-300 bg-white p-3">
-            <h2 className="mb-2 font-semibold text-slate-800">Add a task</h2>
-            <p className="mb-2 text-xs text-slate-500">
+          <div
+            className={`rounded-lg border border-warm-taupe p-3 ${isNight ? "bg-olive text-warm-ivory" : "bg-taupe-light text-olive"}`}>
+            <h2 className="mb-2 font-semibold">Add a task</h2>
+            <p
+              className={`mb-2 text-xs ${isNight ? "text-warm-taupe" : "text-olive"}`}>
               {scheduledHours.toFixed(1)} hours scheduled today
             </p>
             <div className="grid gap-2 sm:grid-cols-2">
-              <input
-                type="text"
-                placeholder="Task name"
-                className="rounded border border-indigo-300 px-2 py-1"
-                value={newTask.name}
-                onChange={(event) =>
-                  setNewTask((task) => ({ ...task, name: event.target.value }))
-                }
-              />
-              <select
-                className="rounded border border-indigo-800 px-2 py-1"
-                value={newTask.category}
-                onChange={(event) =>
-                  setNewTask((task) => ({
-                    ...task,
-                    category: event.target.value as Category,
-                  }))
-                }>
-                {Object.keys(categories).map((category) => (
-                  <option key={category}>{category}</option>
-                ))}
-              </select>
-              <input
-                type="number"
-                step="0.25"
-                min="0"
-                max="23.75"
-                aria-label="Start time"
-                className="rounded border border-[#bcbcbc] px-2 py-1"
-                value={newTask.startHour}
-                onChange={(event) =>
-                  setNewTask((task) => ({
-                    ...task,
-                    startHour: Number(event.target.value),
-                  }))
-                }
-              />
-              <input
-                type="number"
-                step="0.25"
-                min="0"
-                max="23.75"
-                aria-label="End time"
-                className="rounded border border-[#bcbcbc] px-2 py-1"
-                value={newTask.endHour}
-                onChange={(event) =>
-                  setNewTask((task) => ({
-                    ...task,
-                    endHour: Number(event.target.value),
-                  }))
-                }
-              />
+              <label className="grid gap-1 text-xs font-semibold uppercase tracking-wide">
+                Task name
+                <input
+                  type="text"
+                  placeholder="What needs doing?"
+                  className={`rounded border border-warm-taupe px-2 py-1 normal-case tracking-normal ${isNight ? "bg-coffee text-warm-ivory" : "bg-warm-ivory text-coffee"}`}
+                  value={newTask.name}
+                  onChange={(event) =>
+                    setNewTask((task) => ({
+                      ...task,
+                      name: event.target.value,
+                    }))
+                  }
+                />
+              </label>
+              <label className="grid gap-1 text-xs font-semibold uppercase tracking-wide">
+                Category
+                <select
+                  className={`rounded border border-warm-taupe px-2 py-1 normal-case tracking-normal ${isNight ? "bg-coffee text-warm-ivory" : "bg-warm-ivory text-olive"}`}
+                  value={newTask.category}
+                  onChange={(event) =>
+                    setNewTask((task) => ({
+                      ...task,
+                      category: event.target.value as Category,
+                    }))
+                  }>
+                  {Object.keys(categories).map((category) => (
+                    <option key={category}>{category}</option>
+                  ))}
+                </select>
+              </label>
+              <label className="grid gap-1 text-xs font-semibold uppercase tracking-wide">
+                Start time
+                <input
+                  type="number"
+                  step="0.25"
+                  min="0"
+                  max="23.75"
+                  aria-label="Start time"
+                  className={`rounded border border-warm-taupe px-2 py-1 normal-case tracking-normal ${isNight ? "bg-coffee text-warm-ivory" : "bg-warm-ivory text-olive"}`}
+                  value={newTask.startHour}
+                  onChange={(event) =>
+                    setNewTask((task) => ({
+                      ...task,
+                      startHour: Number(event.target.value),
+                    }))
+                  }
+                />
+              </label>
+              <label className="grid gap-1 text-xs font-semibold uppercase tracking-wide">
+                End time
+                <input
+                  type="number"
+                  step="0.25"
+                  min="0"
+                  max="23.75"
+                  aria-label="End time"
+                  className={`rounded border border-warm-taupe px-2 py-1 normal-case tracking-normal ${isNight ? "bg-coffee text-warm-ivory" : "bg-warm-ivory text-olive"}`}
+                  value={newTask.endHour}
+                  onChange={(event) =>
+                    setNewTask((task) => ({
+                      ...task,
+                      endHour: Number(event.target.value),
+                    }))
+                  }
+                />
+              </label>
             </div>
             <button
               type="button"
@@ -323,7 +344,7 @@ const FaceClock: React.FC = () => {
                 !newTask.name.trim() ||
                 durationFor(newTask.startHour, newTask.endHour) === 0
               }
-              className="mt-3 w-full rounded bg-slate-800 px-4 py-2 font-medium text-indigo-400 transition-colors hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50">
+              className="mt-3 w-full rounded bg-terracotta px-4 py-2 font-medium text-warm-ivory transition-colors hover:bg-coffee disabled:cursor-not-allowed disabled:opacity-50">
               Add Task
             </button>
           </div>
