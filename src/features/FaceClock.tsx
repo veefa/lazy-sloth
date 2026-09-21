@@ -123,6 +123,11 @@ const FaceClock: React.FC = () => {
 
   const hourAngle = ((time.getHours() % 24) + time.getMinutes() / 60) * 15 - 90;
   const minuteAngle = (time.getMinutes() + time.getSeconds() / 60) * 6 - 90;
+  const scheduledHours = tasks.reduce(
+    (total, task) => total + durationFor(task.startHour, task.endHour),
+    0,
+  );
+  const isOverloaded = scheduledHours > 22;
 
   return (
     <div className="mx-auto w-full max-w-6xl pt-6">
@@ -241,8 +246,22 @@ const FaceClock: React.FC = () => {
         <section
           className="w-full space-y-3 px-4 md:w-80 md:flex-none md:px-0"
           aria-label="Task controls">
+          {isOverloaded && (
+            <div
+              role="alert"
+              className="rounded-lg border border-red-300 bg-red-50 p-3 text-sm text-red-800">
+              <p className="font-semibold">Overload warning</p>
+              <p className="mt-1">
+                You have {scheduledHours.toFixed(1)} hours of scheduled tasks.
+                Leave time for sleep and rest.
+              </p>
+            </div>
+          )}
           <div className="rounded-lg border border-indigo-300 bg-white p-3">
             <h2 className="mb-2 font-semibold text-slate-800">Add a task</h2>
+            <p className="mb-2 text-xs text-slate-500">
+              {scheduledHours.toFixed(1)} hours scheduled today
+            </p>
             <div className="grid gap-2 sm:grid-cols-2">
               <input
                 type="text"
