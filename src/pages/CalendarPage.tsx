@@ -111,7 +111,7 @@ const CalendarPage: React.FC = () => {
         </nav>
 
         <section
-          className="mt-5 overflow-hidden rounded-lg border border-neutral-900"
+          className="mt-5 overflow-hidden rounded-lg border border-olive-600"
           aria-label={`${monthLabel} calendar`}>
           {view === "Month" ? (
             <div className="grid grid-cols-1 gap-px bg-neutral-900 sm:grid-cols-2 lg:grid-cols-3">
@@ -122,7 +122,7 @@ const CalendarPage: React.FC = () => {
                   1,
                 );
                 return (
-                  <article key={monthIndex} className="bg-black p-3">
+                  <article key={monthIndex} className="bg-olive-800 p-3">
                     <h2 className="mb-2 text-sm font-semibold text-warm-taupe">
                       {overviewMonth.toLocaleDateString("en-US", {
                         month: "long",
@@ -141,7 +141,7 @@ const CalendarPage: React.FC = () => {
                           return (
                             <span
                               key={date.toISOString()}
-                              className={`relative mx-auto flex h-5 w-5 items-center justify-center ${!currentMonth ? "text-neutral-800" : "text-neutral-500"} ${isToday ? "rounded-full bg-blue-600 font-bold text-white" : ""}`}>
+                              className={`relative mx-auto flex h-5 w-5 items-center justify-center ${!currentMonth ? "text-neutral-800" : "text-neutral-500"} ${isToday ? "rounded-full bg-terracotta font-bold text-warm-taupe" : ""}`}>
                               {date.getMonth() === monthIndex
                                 ? date.getDate()
                                 : ""}
@@ -165,12 +165,12 @@ const CalendarPage: React.FC = () => {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-7 border-b border-neutral-800 bg-neutral-950">
+              <div className="grid grid-cols-7 border-b border-olive-600 bg-olive-800">
                 {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
                   (day) => (
                     <div
                       key={day}
-                      className="px-2 py-3 text-center text-xs font-semibold uppercase tracking-wider text-neutral-500 sm:px-4 sm:text-sm">
+                      className="px-2 py-3 text-center text-xs font-semibold uppercase tracking-wider text-warm-taupe sm:px-4 sm:text-sm">
                       {day}
                     </div>
                   ),
@@ -183,16 +183,16 @@ const CalendarPage: React.FC = () => {
                   return (
                     <div
                       key={date.toISOString()}
-                      className={`min-h-28 border-b border-r border-neutral-900 p-2 sm:min-h-36 sm:p-3 ${currentMonth ? "bg-black" : "bg-neutral-950/70"}`}>
+                      className={`min-h-28 border-b border-r border-olive p-2 sm:min-h-36 sm:p-3 ${currentMonth ? "bg-olive-800" : "bg-olive-700/70"}`}>
                       <div
-                        className={`flex h-8 w-8 items-center justify-center text-sm ${!currentMonth ? "text-neutral-700" : "text-neutral-400"} ${isToday ? "rounded-full bg-terracotta font-bold text-white" : ""}`}>
+                        className={`flex h-8 w-8 items-center justify-center text-sm ${!currentMonth ? "text-warm-ivory" : "text-warm-taupe"} ${isToday ? "rounded-full bg-terracotta font-bold text-warm-taupe" : ""}`}>
                         {date.getDate()}
                       </div>
                       <div className="mt-1 space-y-1">
                         {dayTasks.map((task: Task) => (
                           <div
                             key={task.id}
-                            className={`truncate rounded px-1.5 py-1 text-left text-[11px] font-medium text-white ${task.completed ? "opacity-40 line-through" : ""}`}
+                            className={`truncate rounded px-1.5 py-1 text-left text-[11px] font-medium text-war ${task.completed ? "opacity-40 line-through" : ""}`}
                             style={{
                               backgroundColor: `${categories[task.category]}cc`,
                             }}
@@ -212,7 +212,7 @@ const CalendarPage: React.FC = () => {
           )}
         </section>
 
-        <footer className="mt-5 flex flex-wrap items-center gap-4 text-xs text-neutral-500">
+        <footer className="mt-5 flex flex-wrap items-center gap-4 text-xs text-warm-ivory">
           <span>
             {tasks.length} saved {tasks.length === 1 ? "task" : "tasks"}
           </span>
