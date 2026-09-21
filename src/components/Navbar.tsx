@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useTheme } from "../features/theme";
 
 type IconName =
   | "schedule"
@@ -82,6 +83,7 @@ const utilityLinks: { to: string; label: string; icon: IconName }[] = [
 
 const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
   const closeMobileMenu = () => setMenuOpen(false);
 
   return (
@@ -109,6 +111,26 @@ const Navbar: React.FC = () => {
             </Link>
           ))}
         </nav>
+        <button
+          type="button"
+          onClick={toggleTheme}
+          aria-label={`Switch to ${theme === "day" ? "night" : "day"} mood`}
+          title={`Switch to ${theme === "day" ? "Night View" : "Day Mood"}`}
+          className="mt-3 flex h-12 w-12 items-center justify-center rounded-lg text-warm-ivory transition hover:bg-olive hover:text-terracotta focus:outline-none focus:ring-2 focus:ring-red-600">
+          <svg
+            className="h-6 w-6"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            aria-hidden="true">
+            {theme === "day" ? (
+              <path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" />
+            ) : (
+              <path d="M20 15.5A8 8 0 0 1 8.5 4 8 8 0 1 0 20 15.5Z" />
+            )}
+          </svg>
+        </button>
         <div className="mt-50 flex w-full flex-col items-center pt-8">
           <div className="w-[80%] border-t border-olive" />
           <nav

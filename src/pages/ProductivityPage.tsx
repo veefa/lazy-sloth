@@ -1,4 +1,5 @@
 import { useTasks } from "../features/taskStore";
+import { useTheme } from "../features/theme";
 
 const durationFor = (startHour: number, endHour: number) => {
   return (endHour - startHour + 24) % 24;
@@ -6,6 +7,8 @@ const durationFor = (startHour: number, endHour: number) => {
 
 const ProductivityPage = () => {
   const tasks = useTasks();
+  const { theme } = useTheme();
+  const isNight = theme === "night";
   const scheduledHours = tasks.reduce(
     (total, task) => total + durationFor(task.startHour, task.endHour),
     0,
@@ -21,7 +24,8 @@ const ProductivityPage = () => {
   const isOverloaded = scheduledHours > 22;
 
   return (
-    <main className="min-h-screen bg-olive px-5 py-8 text-warm-ivory md:ml-24 md:px-10">
+    <main
+      className={`min-h-screen px-5 py-8 md:ml-24 md:px-10 ${isNight ? "bg-coffee text-warm-ivory" : "bg-warm-ivory text-olive"}`}>
       <div className="mx-auto max-w-6xl">
         <header className="mb-8">
           <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-terracotta">
@@ -30,7 +34,7 @@ const ProductivityPage = () => {
           <h1 className="text-4xl font-semibold tracking-tight">
             Productivity
           </h1>
-          <p className="mt-2 text-warm-taupe">
+          <p className={`mt-2 ${isNight ? "text-warm-taupe" : "text-olive"}`}>
             See how your planned work balances with time left to rest.
           </p>
         </header>
@@ -38,12 +42,21 @@ const ProductivityPage = () => {
         {isOverloaded && (
           <div
             role="alert"
-            className="mb-6 flex items-start gap-3 rounded-xl border border-terracotta bg-coffee p-4 text-warm-taupe">
-            <span className="text-xl" aria-hidden="true">
-              !
-            </span>
+            className={`mb-6 flex items-start gap-3 rounded-xl border-3 border-terracotta p-4 ${isNight ? "bg-terracotta text-warm-taupe" : "bg-terracotta text-coffee"}`}>
+            <svg
+              className="mt-0.5 h-6 w-6 shrink-0 text-warm-ivory motion-safe:animate-[warning-signal_1.3s_ease-in-out_infinite]"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true">
+              <path d="m12 3 9 17H3L12 3Z" />
+              <path d="M12 9v5M12 17h.01" />
+            </svg>
             <div>
-              <h2 className="font-semibold text-warm-ivory">
+              <h2 className="font-semibold text-warm-taupe">
                 Overload warning
               </h2>
               <p className="mt-1 text-sm">
@@ -55,7 +68,7 @@ const ProductivityPage = () => {
         )}
 
         <section
-          className="rounded-2xl bg-coffee p-6 shadow-lg"
+          className={`rounded-2xl p-6 shadow-lg ${isNight ? "bg-olive" : "bg-taupe-light"}`}
           aria-labelledby="overview-heading">
           <h2 id="overview-heading" className="text-2xl font-semibold">
             Overview
@@ -71,46 +84,50 @@ const ProductivityPage = () => {
               label="Rest"
               value={`${restScore}%`}
               detail={`${Math.max(0, 24 - scheduledHours).toFixed(1)}h remaining`}
-              color="text-warm-taupe"
+              color="text-olive"
             />
           </div>
           <div
-            className="mt-8 h-3 overflow-hidden rounded-full bg-olive"
+            className="mt-8 h-3 overflow-hidden rounded-full bg-coffee"
             aria-label={`${productivityScore}% productivity and ${restScore}% rest`}>
             <div
               className="h-full bg-terracotta transition-all"
               style={{ width: `${productivityScore}%` }}
             />
           </div>
-          <p className="mt-3 text-sm text-warm-taupe">
+          <p
+            className={`mt-3 text-sm ${isNight ? "text-warm-taupe" : "text-olive"}`}>
             Balance is calculated from scheduled task time versus the 24-hour
             day.
           </p>
         </section>
 
         <section
-          className="mt-5 rounded-2xl bg-coffee p-6"
+          className={`mt-5 rounded-2xl p-6 ${isNight ? "bg-olive" : "bg-taupe-light"}`}
           aria-labelledby="completion-heading">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
               <h2 id="completion-heading" className="text-2xl font-semibold">
                 Task completion rate
               </h2>
-              <p className="mt-1 text-sm text-warm-taupe">
+              <p
+                className={`mt-1 text-sm ${isNight ? "text-warm-taupe" : "text-olive"}`}>
                 Completed tasks compared with your saved tasks.
               </p>
             </div>
-            <strong className="text-4xl text-warm-taupe">
+            <strong
+              className={`text-4xl ${isNight ? "text-warm-taupe" : "text-olive"}`}>
               {completionRate}%
             </strong>
           </div>
-          <div className="mt-5 h-2 overflow-hidden rounded-full bg-olive">
+          <div className="mt-5 h-2 overflow-hidden rounded-full bg-coffee">
             <div
               className="h-full bg-warm-taupe transition-all"
               style={{ width: `${completionRate}%` }}
             />
           </div>
-          <p className="mt-3 text-sm text-warm-taupe">
+          <p
+            className={`mt-3 text-sm ${isNight ? "text-warm-taupe" : "text-olive"}`}>
             {completedTasks} of {tasks.length}{" "}
             {tasks.length === 1 ? "task" : "tasks"} completed
           </p>
@@ -133,8 +150,11 @@ const Metric = ({
 }) => (
   <div className="text-center md:border-r md:border-warm-taupe md:last:border-0">
     <p className={`text-5xl font-semibold ${color}`}>{value}</p>
-    <p className="mt-3 text-xl text-warm-taupe">{label}</p>
-    <p className="mt-2 text-sm text-taupe-dark">{detail}</p>
+    <p
+      className={`mt-3 text-xl ${color === "text-terracotta" ? "text-terracotta" : "text-olive"}`}>
+      {label}
+    </p>
+    <p className="mt-2 text-sm text-olive">{detail}</p>
   </div>
 );
 

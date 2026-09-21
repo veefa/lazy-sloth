@@ -7,6 +7,7 @@ import {
   updateTask,
   useTasks,
 } from "../features/taskStore";
+import { useTheme } from "../features/theme";
 
 const formatHour = (hour: number) => {
   const hours = Math.floor(hour) % 24;
@@ -21,6 +22,8 @@ const durationFor = (task: Task) => {
 
 const TaskManager: React.FC = () => {
   const tasks = useTasks();
+  const { theme } = useTheme();
+  const isNight = theme === "night";
   const completedCount = tasks.filter((task) => task.completed).length;
 
   const changeTime = (
@@ -33,7 +36,8 @@ const TaskManager: React.FC = () => {
   };
 
   return (
-    <main className="min-h-screen bg-warm-ivory px-5 py-8 text-coffee md:ml-24 md:px-10">
+    <main
+      className={`min-h-screen px-5 py-8 md:ml-24 md:px-10 ${isNight ? "bg-coffee text-warm-ivory" : "bg-warm-ivory text-olive"}`}>
       <div className="mx-auto max-w-4xl">
         <header className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
@@ -41,19 +45,21 @@ const TaskManager: React.FC = () => {
               Your day
             </p>
             <h1 className="text-4xl font-bold">Task manager</h1>
-            <p className="mt-2 text-taupe-dark">
+            <p className={`mt-2 ${isNight ? "text-warm-taupe" : "text-olive"}`}>
               Tasks added on the face clock are saved here.
             </p>
           </div>
-          <p className="rounded-full bg-taupe-light px-4 py-2 text-sm font-semibold">
+          <p
+            className={`rounded-full px-4 py-2 text-sm font-semibold ${isNight ? "bg-olive text-warm-ivory" : "bg-olive text-warm-ivory"}`}>
             {completedCount}/{tasks.length} complete
           </p>
         </header>
 
         {tasks.length === 0 ? (
-          <section className="rounded-xl border border-warm-taupe bg-white p-8 text-center">
+          <section
+            className={`rounded-xl border border-warm-taupe p-8 text-center ${isNight ? "bg-olive" : "bg-taupe-light"}`}>
             <h2 className="text-xl font-semibold">No tasks yet</h2>
-            <p className="mt-2 text-taupe-dark">
+            <p className={`mt-2 ${isNight ? "text-warm-taupe" : "text-olive"}`}>
               Add a task from the FaceClock to see it here.
             </p>
           </section>
@@ -62,7 +68,7 @@ const TaskManager: React.FC = () => {
             {tasks.map((task) => (
               <article
                 key={task.id}
-                className="rounded-xl border border-warm-taupe bg-white p-4 shadow-sm">
+                className={`rounded-xl border border-warm-taupe p-4 shadow-sm ${isNight ? "bg-olive" : "bg-taupe-light"}`}>
                 <div className="flex flex-wrap items-start gap-4">
                   <label className="mt-1 flex items-center gap-3">
                     <input
@@ -84,13 +90,15 @@ const TaskManager: React.FC = () => {
                     style={{ backgroundColor: categories[task.category] }}>
                     {task.category}
                   </span>
-                  <span className="ml-auto text-sm font-semibold text-taupe-dark">
+                  <span
+                    className={`ml-auto text-sm font-semibold ${isNight ? "text-warm-taupe" : "text-olive"}`}>
                     {durationFor(task)}
                   </span>
                 </div>
 
                 <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_1fr_1.2fr_auto] sm:items-end">
-                  <label className="grid gap-1 text-xs font-semibold uppercase tracking-wide text-taupe-dark">
+                  <label
+                    className={`grid gap-1 text-xs font-semibold uppercase tracking-wide ${isNight ? "text-warm-taupe" : "text-olive"}`}>
                     Start
                     <input
                       type="number"
@@ -101,10 +109,11 @@ const TaskManager: React.FC = () => {
                       onChange={(event) =>
                         changeTime(task, "startHour", event.target.value)
                       }
-                      className="rounded border border-warm-taupe px-2 py-2 text-sm text-coffee"
+                      className={`rounded border border-warm-taupe px-2 py-2 text-sm ${isNight ? "bg-coffee text-warm-ivory" : "bg-warm-ivory text-coffee"}`}
                     />
                   </label>
-                  <label className="grid gap-1 text-xs font-semibold uppercase tracking-wide text-taupe-dark">
+                  <label
+                    className={`grid gap-1 text-xs font-semibold uppercase tracking-wide ${isNight ? "text-warm-taupe" : "text-olive"}`}>
                     End
                     <input
                       type="number"
@@ -115,10 +124,11 @@ const TaskManager: React.FC = () => {
                       onChange={(event) =>
                         changeTime(task, "endHour", event.target.value)
                       }
-                      className="rounded border border-warm-taupe px-2 py-2 text-sm text-coffee"
+                      className={`rounded border border-warm-taupe px-2 py-2 text-sm ${isNight ? "bg-coffee text-warm-ivory" : "bg-warm-ivory text-coffee"}`}
                     />
                   </label>
-                  <label className="grid gap-1 text-xs font-semibold uppercase tracking-wide text-taupe-dark">
+                  <label
+                    className={`grid gap-1 text-xs font-semibold uppercase tracking-wide ${isNight ? "text-warm-taupe" : "text-olive"}`}>
                     Category
                     <select
                       value={task.category}
@@ -127,7 +137,7 @@ const TaskManager: React.FC = () => {
                           category: event.target.value as Category,
                         })
                       }
-                      className="rounded border border-warm-taupe px-2 py-2 text-sm text-coffee">
+                      className={`rounded border border-warm-taupe px-2 py-2 text-sm ${isNight ? "bg-coffee text-warm-ivory" : "bg-warm-ivory text-coffee"}`}>
                       {Object.keys(categories).map((category) => (
                         <option key={category}>{category}</option>
                       ))}
@@ -136,11 +146,12 @@ const TaskManager: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => deleteTask(task.id)}
-                    className="rounded px-3 py-2 text-sm font-semibold text-terracotta hover:bg-taupe-light">
+                    className="rounded px-3 py-2 text-sm font-semibold text-terracotta hover:bg-warm-ivory">
                     Delete
                   </button>
                 </div>
-                <p className="mt-2 text-xs text-taupe-dark">
+                <p
+                  className={`mt-2 text-xs ${isNight ? "text-warm-taupe" : "text-olive"}`}>
                   {formatHour(task.startHour)} - {formatHour(task.endHour)}
                 </p>
               </article>
