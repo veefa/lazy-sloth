@@ -47,7 +47,12 @@ const SidebarIcon: React.FC<{ name: IconName }> = ({ name }) => {
       )}
       {name === "settings" && (
         <>
-          <path d="m12 3.5 2 .5.7 1.8 1.8.7 1.7-.8 1.4 1.4-.8 1.7.7 1.8 1.8.7v2l-1.8.7-.7 1.8.8 1.7-1.4 1.4-1.7-.8-1.8.7-.7 1.8h-2l-.7-1.8-1.8-.7-1.7.8-1.4-1.4.8-1.7-.7-1.8-1.8-.7v-2l1.8-.7.7-1.8-.8-1.7 1.4-1.4 1.7.8 1.8-.7L10 4l2-.5Z" />
+          <path
+            fill="currentColor"
+            stroke="none"
+            fillRule="evenodd"
+            d="M19.43 12.98c.04-.32.07-.65.07-.98s-.02-.66-.07-.98l2.11-1.65a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.61-.22l-2.49 1a7.3 7.3 0 0 0-1.7-.98L14.5 2.42A.49.49 0 0 0 14 2h-4a.49.49 0 0 0-.49.42L9.13 5.07c-.61.25-1.18.58-1.7.98l-2.49-1a.5.5 0 0 0-.61.22l-2 3.46a.5.5 0 0 0 .12.64l2.11 1.65c-.04.32-.08.65-.08.98s.03.66.08.98l-2.11 1.65a.5.5 0 0 0-.12.64l2 3.46a.5.5 0 0 0 .61.22l2.49-1c.52.4 1.09.73 1.7.98l.38 2.65A.49.49 0 0 0 10 22h4a.49.49 0 0 0 .49-.42l.38-2.65c.61-.25 1.18-.58 1.7-.98l2.49 1a.5.5 0 0 0 .61-.22l2-3.46a.5.5 0 0 0-.12-.64l-2.11-1.65ZM12 15.5A3.5 3.5 0 1 1 12 8a3.5 3.5 0 0 1 0 7.5Z"
+          />
         </>
       )}
       {name === "help" && (
@@ -111,28 +116,28 @@ const Navbar: React.FC = () => {
             </Link>
           ))}
         </nav>
-        <button
-          type="button"
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === "day" ? "night" : "day"} mood`}
-          title={`Switch to ${theme === "day" ? "Night View" : "Day Mood"}`}
-          className="mt-3 flex h-12 w-12 items-center justify-center rounded-lg text-warm-ivory transition hover:bg-olive hover:text-terracotta focus:outline-none focus:ring-2 focus:ring-red-600">
-          <svg
-            className="h-6 w-6"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            aria-hidden="true">
-            {theme === "day" ? (
-              <path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" />
-            ) : (
-              <path d="M20 15.5A8 8 0 0 1 8.5 4 8 8 0 1 0 20 15.5Z" />
-            )}
-          </svg>
-        </button>
         <div className="mt-50 flex w-full flex-col items-center pt-8">
-          <div className="w-[80%] border-t border-olive" />
+          <div className="w-[80%] border-t border-olive pb-4" />
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label={`Switch to ${theme === "day" ? "night" : "day"} mood`}
+            title={`Switch to ${theme === "day" ? "Night View" : "Day Mood"}`}
+            className="mb-2 flex h-12 w-12 items-center justify-center rounded-lg text-warm-ivory transition hover:bg-olive hover:text-terracotta focus:outline-none focus:ring-2 focus:ring-warm-ivory">
+            <svg
+              className="h-6 w-6"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              aria-hidden="true">
+              {theme === "day" ? (
+                <path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" />
+              ) : (
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" />
+              )}
+            </svg>
+          </button>
           <nav
             aria-label="Utility navigation"
             className="flex flex-col items-center gap-4">
