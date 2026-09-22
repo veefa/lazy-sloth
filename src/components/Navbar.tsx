@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNotifications } from "../features/notificationCenter";
 import { useTheme } from "../features/theme";
 
 type IconName =
@@ -9,7 +10,8 @@ type IconName =
   | "productivity"
   | "settings"
   | "help"
-  | "log";
+  | "log"
+  | "bell";
 
 const SidebarIcon: React.FC<{ name: IconName }> = ({ name }) => {
   const common = {
@@ -68,6 +70,12 @@ const SidebarIcon: React.FC<{ name: IconName }> = ({ name }) => {
           <path d="M6 20c.5-3.3 2.5-5 6-5s5.5 1.7 6 5" />
         </>
       )}
+      {name === "bell" && (
+        <>
+          <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5" />
+          <path d="M10 20a2 2 0 0 0 4 0" />
+        </>
+      )}
     </svg>
   );
 };
@@ -88,6 +96,7 @@ const utilityLinks: { to: string; label: string; icon: IconName }[] = [
 const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const { unreadCount, panelOpen, openPanel, closePanel } = useNotifications();
   const closeMobileMenu = () => setMenuOpen(false);
 
   return (
@@ -117,6 +126,21 @@ const Navbar: React.FC = () => {
         </nav>
         <div className="mt-50 flex w-full flex-col items-center pt-8">
           <div className="w-[80%] border-t border-olive pb-4" />
+          <div className="relative mb-2">
+            <button
+              type="button"
+              onClick={() => (panelOpen ? closePanel() : openPanel())}
+              aria-label="Open notifications"
+              title="Notifications"
+              className="relative flex h-12 w-12 items-center justify-center rounded-lg text-warm-ivory transition hover:bg-olive hover:text-terracotta focus:outline-none focus:ring-2 focus:ring-warm-ivory">
+              <SidebarIcon name="bell" />
+              {unreadCount > 0 && (
+                <span className="absolute -right-1 -top-1 inline-flex min-h-5 min-w-5 items-center justify-center rounded-full bg-terracotta px-1 text-[10px] font-bold text-warm-ivory">
+                  {unreadCount > 9 ? "9+" : unreadCount}
+                </span>
+              )}
+            </button>
+          </div>
           <button
             type="button"
             onClick={toggleTheme}
@@ -163,31 +187,45 @@ const Navbar: React.FC = () => {
 
       {/* Compact navigation for mobile */}
       <nav className="w-full bg-taupe-300 px-5 py-4 shadow md:hidden">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-3">
           <Link
             to="/#home"
             className="font-bold text-olive text-xl"
             onClick={closeMobileMenu}>
             Lazy Schedule
           </Link>
-          <button
-            className="text-taupe-700 focus:outline-none"
-            onClick={() => setMenuOpen((isOpen) => !isOpen)}
-            aria-label="Toggle menu"
-            aria-expanded={menuOpen}>
-            <svg
-              className="h-7 w-7"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d={menuOpen ? "M6 18L18 6M6 6l12 12" : "M4 8h16M4 16h16"}
-              />
-            </svg>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => (panelOpen ? closePanel() : openPanel())}
+              aria-label="Open notifications"
+              className="relative flex h-9 w-9 items-center justify-center rounded-full bg-olive text-warm-ivory focus:outline-none focus:ring-2 focus:ring-olive">
+              <SidebarIcon name="bell" />
+              {unreadCount > 0 && (
+                <span className="absolute -right-1 -top-1 inline-flex min-h-4 min-w-4 items-center justify-center rounded-full bg-terracotta px-1 text-[9px] font-bold text-warm-ivory">
+                  {unreadCount > 9 ? "9+" : unreadCount}
+                </span>
+              )}
+            </button>
+            <button
+              className="text-taupe-700 focus:outline-none"
+              onClick={() => setMenuOpen((isOpen) => !isOpen)}
+              aria-label="Toggle menu"
+              aria-expanded={menuOpen}>
+              <svg
+                className="h-7 w-7"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d={menuOpen ? "M6 18L18 6M6 6l12 12" : "M4 8h16M4 16h16"}
+                />
+              </svg>
+            </button>
+          </div>
         </div>
         {menuOpen && (
           <div className="mt-4 flex flex-col gap-2 border-t border-taupe-400 pt-3 font-semibold">

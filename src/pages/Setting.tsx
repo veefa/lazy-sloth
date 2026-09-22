@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useNotificationPreferences } from "../features/notificationCenter";
 import { useTheme } from "../features/theme";
 
 const focusSettings = [
@@ -9,9 +9,7 @@ const focusSettings = [
 
 const SettingPage = () => {
   const { theme, toggleTheme } = useTheme();
-  const [gentleTaskNudges, setGentleTaskNudges] = useState(true);
-  const [lowNoiseFocusMode, setLowNoiseFocusMode] = useState(false);
-  const [autoSavePlannerState, setAutoSavePlannerState] = useState(true);
+  const { preferences, updatePreference } = useNotificationPreferences();
   const isNight = theme === "night";
 
   const toggleButton = (
@@ -132,55 +130,36 @@ const SettingPage = () => {
 
             <div className="mt-5 space-y-4">
               {toggleButton(
-                gentleTaskNudges,
-                () => setGentleTaskNudges((current) => !current),
+                preferences.gentleTaskNudges,
+                () =>
+                  updatePreference(
+                    "gentleTaskNudges",
+                    !preferences.gentleTaskNudges,
+                  ),
                 "Gentle task nudges",
                 "Suggest a task when you have an empty space in your schedule.",
               )}
               {toggleButton(
-                lowNoiseFocusMode,
-                () => setLowNoiseFocusMode((current) => !current),
-                "Low-noise focus mode",
-                "When focusing, quietly hide non-essential tasks and distractions.",
+                preferences.overloadAwareness,
+                () =>
+                  updatePreference(
+                    "overloadAwareness",
+                    !preferences.overloadAwareness,
+                  ),
+                "Overload awareness",
+                "Alert you when the day is fuller than it should be.",
               )}
               {toggleButton(
-                autoSavePlannerState,
-                () => setAutoSavePlannerState((current) => !current),
-                "Auto-save planner state",
-                "Automatically save your schedule as you make changes.",
+                preferences.breakReminders,
+                () =>
+                  updatePreference(
+                    "breakReminders",
+                    !preferences.breakReminders,
+                  ),
+                "Break reminders",
+                "Suggest a short pause when a focus block becomes too long.",
               )}
             </div>
-
-            {gentleTaskNudges && (
-              <div
-                className={`mt-6 rounded-2xl border border-dashed border-terracotta p-5 ${isNight ? "bg-coffee/20" : "bg-warm-ivory/90"}`}>
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-terracotta">
-                  Need a little direction?
-                </p>
-                <p
-                  className={`mt-3 text-lg ${isNight ? "text-warm-ivory" : "text-olive"}`}>
-                  You have 40 minutes free. Want to work on{" "}
-                  <span className="font-semibold italic">French practice</span>?
-                </p>
-                <div className="mt-4 flex flex-wrap gap-3">
-                  <button
-                    type="button"
-                    className="rounded-full bg-terracotta px-4 py-2 text-sm font-semibold text-warm-ivory transition hover:bg-terracotta/90 focus:outline-none focus:ring-2 focus:ring-terracotta">
-                    Suggest something
-                  </button>
-                  <button
-                    type="button"
-                    className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${isNight ? "border-warm-ivory text-warm-ivory hover:bg-warm-ivory/10" : "border-olive text-olive hover:bg-olive/10"}`}>
-                    Not now
-                  </button>
-                  <button
-                    type="button"
-                    className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${isNight ? "border-warm-ivory text-warm-ivory hover:bg-warm-ivory/10" : "border-olive text-olive hover:bg-olive/10"}`}>
-                    I’ll choose
-                  </button>
-                </div>
-              </div>
-            )}
           </section>
         </div>
       </div>
