@@ -82,8 +82,7 @@ const links: { to: string; label: string; icon: IconName }[] = [
 const logLink = { to: "/log", label: "Log", icon: "log" as IconName };
 
 const utilityLinks: { to: string; label: string; icon: IconName }[] = [
-  { to: "/Settings   ", label: "Settings", icon: "settings" },
-  { to: "/Help   ", label: "Help", icon: "help" },
+  { to: "/settings", label: "Settings", icon: "settings" },
 ];
 
 const Navbar: React.FC = () => {
