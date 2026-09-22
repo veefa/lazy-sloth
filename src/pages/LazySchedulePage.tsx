@@ -1,6 +1,6 @@
-import { useNotificationPreferences } from "../features/notificationCenter";
+import { useNotificationPreferences } from "../features/notificationHooks";
 import FaceClock from "../features/FaceClock";
-import { useTheme } from "../features/theme";
+import { useTheme } from "../features/themeHooks";
 
 const LazySchedulePage = () => {
   const { theme } = useTheme();

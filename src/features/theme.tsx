@@ -1,28 +1,19 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-
-type Theme = "day" | "night";
-
-type ThemeContextValue = {
-  theme: Theme;
-  toggleTheme: () => void;
-};
-
-const ThemeContext = createContext<ThemeContextValue | null>(null);
-const storageKey = "lazy-sloth-theme";
+import React, { useEffect, useState } from "react";
+import { ThemeContext, type Theme, themeStorageKey } from "./themeContext";
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window === "undefined") return "day";
-    return window.localStorage.getItem(storageKey) === "night"
+    return window.localStorage.getItem(themeStorageKey) === "night"
       ? "night"
       : "day";
   });
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
-    window.localStorage.setItem(storageKey, theme);
+    window.localStorage.setItem(themeStorageKey, theme);
   }, [theme]);
 
   const toggleTheme = () =>
@@ -33,10 +24,4 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       {children}
     </ThemeContext.Provider>
   );
-};
-
-export const useTheme = () => {
-  const context = useContext(ThemeContext);
-  if (!context) throw new Error("useTheme must be used inside ThemeProvider");
-  return context;
 };

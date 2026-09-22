@@ -1,5 +1,5 @@
 import { useTasks } from "../features/taskStore";
-import { useTheme } from "../features/theme";
+import { useTheme } from "../features/themeHooks";
 
 const durationFor = (startHour: number, endHour: number) => {
   return (endHour - startHour + 24) % 24;

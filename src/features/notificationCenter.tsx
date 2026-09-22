@@ -1,89 +1,12 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { NotificationContext } from "./notificationContext";
+import { useNotificationPreferences } from "./notificationHooks";
+import {
+  type NotificationItem,
+  type NotificationType,
+  getDurationHours,
+} from "./notificationUtils";
 import { useTasks } from "./taskStore";
-
-export type NotificationType = "free-space" | "overload" | "break";
-
-export type NotificationItem = {
-  id: string;
-  type: NotificationType;
-  title: string;
-  message: string;
-  unread: boolean;
-  read: boolean;
-  createdAt: number;
-  actionLabel?: string;
-  secondaryActionLabel?: string;
-};
-
-export type NotificationPreferences = {
-  gentleTaskNudges: boolean;
-  overloadAwareness: boolean;
-  breakReminders: boolean;
-};
-
-const defaultPreferences: NotificationPreferences = {
-  gentleTaskNudges: true,
-  overloadAwareness: true,
-  breakReminders: true,
-};
-
-const storageKey = "lazy-sloth-notification-settings";
-
-const getDurationHours = (startHour: number, endHour: number) =>
-  (endHour - startHour + 24) % 24;
-
-const loadPreferences = (): NotificationPreferences => {
-  if (typeof window === "undefined") return defaultPreferences;
-
-  try {
-    const saved = window.localStorage.getItem(storageKey);
-    if (!saved) return defaultPreferences;
-
-    return { ...defaultPreferences, ...JSON.parse(saved) };
-  } catch {
-    return defaultPreferences;
-  }
-};
-
-export const useNotificationPreferences = () => {
-  const [preferences, setPreferences] =
-    useState<NotificationPreferences>(loadPreferences);
-
-  useEffect(() => {
-    window.localStorage.setItem(storageKey, JSON.stringify(preferences));
-  }, [preferences]);
-
-  const updatePreference = (
-    key: keyof NotificationPreferences,
-    value: boolean,
-  ) => {
-    setPreferences((current) => ({ ...current, [key]: value }));
-  };
-
-  return { preferences, updatePreference };
-};
-
-type NotificationContextValue = {
-  notifications: NotificationItem[];
-  unreadCount: number;
-  panelOpen: boolean;
-  toast: NotificationItem | null;
-  openPanel: () => void;
-  closePanel: () => void;
-  markAsRead: (id: string) => void;
-  clearNotification: (id: string) => void;
-  dismissToast: () => void;
-};
-
-const NotificationContext = createContext<NotificationContextValue | null>(
-  null,
-);
 
 const createNotificationId = () => {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
@@ -125,7 +48,7 @@ const NotificationPanel = () => {
   } = context;
 
   return (
-    <div className="absolute right-0 top-full z-50 mt-3 w-[320px] rounded-2xl border border-warm-taupe bg-warm-ivory p-3 text-olive shadow-2xl md:right-0">
+    <div className="fixed right-4 top-20 z-50 w-[min(90vw,320px)] rounded-2xl border border-warm-taupe bg-warm-ivory p-3 text-olive shadow-2xl md:right-6">
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <h3 className="font-semibold text-lg">Little nudges</h3>
@@ -405,13 +328,4 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
       {panelOpen && <NotificationPanel />}
     </NotificationContext.Provider>
   );
-};
-
-export const useNotifications = () => {
-  const context = useContext(NotificationContext);
-  if (!context)
-    throw new Error(
-      "useNotifications must be used inside NotificationProvider",
-    );
-  return context;
 };

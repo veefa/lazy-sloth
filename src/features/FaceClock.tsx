@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ClockHand from "./ClockHands";
 import TimeBlockArc from "./TimeBlockArc";
-import { useTheme } from "./theme";
+import { useTheme } from "./themeHooks";
 import {
   addTask,
   categories,

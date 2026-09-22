@@ -7,7 +7,7 @@ import {
   updateTask,
   useTasks,
 } from "../features/taskStore";
-import { useTheme } from "../features/theme";
+import { useTheme } from "../features/themeHooks";
 
 const formatHour = (hour: number) => {
   const hours = Math.floor(hour) % 24;

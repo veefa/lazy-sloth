@@ -1,5 +1,5 @@
-import { useNotificationPreferences } from "../features/notificationCenter";
-import { useTheme } from "../features/theme";
+import { useNotificationPreferences } from "../features/notificationHooks";
+import { useTheme } from "../features/themeHooks";
 
 const focusSettings = [
   { label: "Work block length", value: "90 minutes" },

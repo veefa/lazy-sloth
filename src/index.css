@@ -26,3 +26,26 @@
     opacity: 0;
   }
 }
+
+@keyframes bell-ring {
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  15% {
+    transform: rotate(-12deg) scale(1.04);
+  }
+
+  30% {
+    transform: rotate(10deg) scale(1.06);
+  }
+
+  45% {
+    transform: rotate(-8deg) scale(1.04);
+  }
+
+  60% {
+    transform: rotate(6deg) scale(1.02);
+  }
+}
