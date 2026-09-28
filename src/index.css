@@ -88,6 +88,10 @@
     padding: clamp(0.625rem, 1.6dvh, 1.5rem);
   }
 
+  .productivity-page__summary-card {
+    padding: clamp(0.75rem, 1.2dvh, 1.25rem);
+  }
+
   .productivity-page__balance {
     display: flex;
     flex-direction: column;
@@ -100,7 +104,7 @@
   }
 
   .productivity-page__donut {
-    width: clamp(9rem, 23dvh, 15rem);
+    width: clamp(10rem, 25dvh, 18rem);
     max-width: 100%;
   }
 
@@ -113,8 +117,8 @@
   }
 
   .productivity-page__weekly-chart {
-    height: clamp(9rem, 22dvh, 15rem);
-    min-height: 9rem;
+    height: clamp(10rem, 25dvh, 17rem);
+    min-height: 10rem;
   }
 
   .productivity-page__balance-item {

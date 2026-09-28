@@ -16,6 +16,7 @@ export type Task = {
   endHour: number;
   category: Category;
   completed: boolean;
+  completedAt?: string;
 };
 
 export type TaskDraft = Omit<Task, "id" | "completed">;
@@ -60,9 +61,15 @@ export const addTask = (draft: TaskDraft) => {
 };
 
 export const updateTask = (id: number, changes: Partial<Omit<Task, "id">>) => {
-  tasks = tasks.map((task) =>
-    task.id === id ? { ...task, ...changes } : task,
-  );
+  tasks = tasks.map((task) => {
+    if (task.id !== id) return task;
+
+    const updatedTask = { ...task, ...changes };
+    if (changes.completed === true && !task.completedAt)
+      updatedTask.completedAt = new Date().toISOString();
+    if (changes.completed === false) delete updatedTask.completedAt;
+    return updatedTask;
+  });
   notify();
 };
 
