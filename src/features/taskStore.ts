@@ -17,9 +17,13 @@ export type Task = {
   category: Category;
   completed: boolean;
   completedAt?: string;
+  inputAt?: string;
 };
 
-export type TaskDraft = Omit<Task, "id" | "completed">;
+export type TaskDraft = Omit<
+  Task,
+  "id" | "completed" | "completedAt" | "inputAt"
+>;
 
 const storageKey = "lazy-sloth-tasks";
 let tasks: Task[] = [];
@@ -54,7 +58,12 @@ export const useTasks = () =>
   useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 
 export const addTask = (draft: TaskDraft) => {
-  const task: Task = { ...draft, id: Date.now(), completed: false };
+  const task: Task = {
+    ...draft,
+    id: Date.now(),
+    completed: false,
+    inputAt: new Date().toISOString(),
+  };
   tasks = [...tasks, task];
   notify();
   return task.id;
@@ -68,6 +77,13 @@ export const updateTask = (id: number, changes: Partial<Omit<Task, "id">>) => {
     if (changes.completed === true && !task.completedAt)
       updatedTask.completedAt = new Date().toISOString();
     if (changes.completed === false) delete updatedTask.completedAt;
+    if (
+      "name" in changes ||
+      "startHour" in changes ||
+      "endHour" in changes ||
+      "category" in changes
+    )
+      updatedTask.inputAt = new Date().toISOString();
     return updatedTask;
   });
   notify();

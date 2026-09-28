@@ -64,15 +64,80 @@ const ProductivityPage = () => {
     }),
   );
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-  const weeklyRestHours =
-    balanceHours.Personal + balanceHours.Health + balanceHours.Rest;
-  const hasWeeklySchedule = scheduledHours > 0;
-  const weeklyBalance = daysOfWeek.map((day) => ({
-    day,
-    work: hasWeeklySchedule ? balanceHours.Work : 0,
-    rest: hasWeeklySchedule ? weeklyRestHours : 0,
-    placeholder: hasWeeklySchedule ? 0 : 4,
+  const weekStart = new Date();
+  weekStart.setHours(0, 0, 0, 0);
+  weekStart.setDate(weekStart.getDate() - ((weekStart.getDay() + 6) % 7));
+  const weeklyEntries = daysOfWeek.map(() => ({
+    work: 0,
+    personal: 0,
+    health: 0,
+    scheduled: 0,
   }));
+  tasks.forEach((task) => {
+    if (!task.inputAt) return;
+    const inputDate = new Date(task.inputAt);
+    if (Number.isNaN(inputDate.getTime())) return;
+
+    const dayOffset = Math.floor(
+      (Date.UTC(
+        inputDate.getFullYear(),
+        inputDate.getMonth(),
+        inputDate.getDate(),
+      ) -
+        Date.UTC(
+          weekStart.getFullYear(),
+          weekStart.getMonth(),
+          weekStart.getDate(),
+        )) /
+        86_400_000,
+    );
+    if (dayOffset < 0 || dayOffset >= weeklyEntries.length) return;
+
+    const day = weeklyEntries[dayOffset];
+    const taskHours = durationFor(task.startHour, task.endHour);
+    day.scheduled += taskHours;
+    if (task.category === "Work") day.work += taskHours;
+    else if (task.category === "Health") day.health += taskHours;
+    else day.personal += taskHours;
+  });
+
+  const weeklyBalance = weeklyEntries.map((entry, index) => {
+    const hasSchedule = entry.scheduled > 0;
+    return {
+      day: daysOfWeek[index],
+      work: entry.work,
+      rest: hasSchedule
+        ? entry.personal +
+          entry.health +
+          Math.max(0, 24 - entry.scheduled)
+        : 0,
+      placeholder: hasSchedule ? 0 : 18,
+      hasSchedule,
+    };
+  });
+  const hasWeeklySchedule = weeklyBalance.some((day) => day.hasSchedule);
+  const weeklyWorkHours = weeklyBalance.reduce(
+    (total, day) => total + day.work,
+    0,
+  );
+  const weeklyRestHours = weeklyBalance.reduce(
+    (total, day) => total + day.rest,
+    0,
+  );
+  const weeklyHoursTotal = weeklyWorkHours + weeklyRestHours;
+  const weeklyWorkPercent = weeklyHoursTotal
+    ? Math.round((weeklyWorkHours / weeklyHoursTotal) * 100)
+    : 0;
+  const weeklyRestPercent = weeklyHoursTotal
+    ? Math.round((weeklyRestHours / weeklyHoursTotal) * 100)
+    : 0;
+  const weeklyDaySummary = weeklyBalance
+    .filter((day) => day.hasSchedule)
+    .map(
+      (day) =>
+        `${day.day}: ${day.work.toFixed(1)}h Work, ${day.rest.toFixed(1)}h Rest`,
+    )
+    .join("; ");
   const productivityScore = Math.min(
     100,
     Math.round((scheduledHours / 24) * 100),
@@ -337,22 +402,35 @@ const ProductivityPage = () => {
                     Weekly Work vs. Rest
                   </h3>
                   <div className="flex gap-3 text-[11px] sm:gap-4 sm:text-xs">
-                    <span className="inline-flex items-center gap-2">
-                      <span
-                        className="h-2.5 w-2.5 rounded-full"
-                        style={{ backgroundColor: weeklyColors.work }}
-                        aria-hidden="true"
-                      />
-                      Work
-                    </span>
-                    <span className="inline-flex items-center gap-2">
-                      <span
-                        className="h-2.5 w-2.5 rounded-full"
-                        style={{ backgroundColor: weeklyColors.rest }}
-                        aria-hidden="true"
-                      />
-                      Rest
-                    </span>
+                    {hasWeeklySchedule ? (
+                      <>
+                        <span className="inline-flex items-center gap-2">
+                          <span
+                            className="h-2.5 w-2.5 rounded-full"
+                            style={{ backgroundColor: weeklyColors.work }}
+                            aria-hidden="true"
+                          />
+                          Work {weeklyWorkPercent}%
+                        </span>
+                        <span className="inline-flex items-center gap-2">
+                          <span
+                            className="h-2.5 w-2.5 rounded-full"
+                            style={{ backgroundColor: weeklyColors.rest }}
+                            aria-hidden="true"
+                          />
+                          Rest {weeklyRestPercent}%
+                        </span>
+                      </>
+                    ) : (
+                      <span className="inline-flex items-center gap-2">
+                        <span
+                          className="h-2.5 w-2.5 rounded-full"
+                          style={{ backgroundColor: weeklyColors.empty }}
+                          aria-hidden="true"
+                        />
+                        No schedule
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div
@@ -360,7 +438,7 @@ const ProductivityPage = () => {
                   role="img"
                   aria-label={
                     hasWeeklySchedule
-                      ? `Weekly Work vs. Rest. The same daily schedule repeats Monday through Sunday: ${balanceHours.Work.toFixed(1)} work hours and ${weeklyRestHours.toFixed(1)} rest hours per day, including Personal, Health, and unscheduled sleep time.`
+                      ? `Weekly Work vs. Rest by task input day: ${weeklyDaySummary}. Rest combines Personal, Health, and unscheduled sleep time.`
                       : "Weekly Work vs. Rest chart. Placeholder bars for Monday through Sunday; no scheduled task data is available."
                   }>
                   <ResponsiveContainer width="100%" height="100%">
@@ -382,54 +460,63 @@ const ProductivityPage = () => {
                         axisLine={false}
                       />
                       <YAxis hide domain={[0, 24]} />
-                      {hasWeeklySchedule && (
-                        <Tooltip
-                          formatter={(value) => `${Number(value).toFixed(1)}h`}
-                          contentStyle={{
-                            backgroundColor: isNight ? "#4a382e" : "#faf7f2",
-                            borderColor: isNight ? "#d8cec3" : "#8a7e73",
-                            borderRadius: 6,
-                          }}
-                          cursor={{
-                            fill: isNight ? "#8a7e73" : "#e8e0d8",
-                            opacity: 0.35,
-                          }}
-                        />
-                      )}
-                      {hasWeeklySchedule ? (
-                        <>
-                          <Bar
-                            dataKey="work"
-                            name="Work"
-                            fill={weeklyColors.work}
-                            barSize={18}
-                            stackId="daily-hours"
-                          />
-                          <Bar
-                            dataKey="rest"
-                            name="Rest"
-                            fill={weeklyColors.rest}
-                            barSize={18}
-                            stackId="daily-hours"
-                            radius={[3, 3, 0, 0]}
-                          />
-                        </>
-                      ) : (
-                        <Bar
-                          dataKey="placeholder"
-                          name="No schedule"
-                          fill={weeklyColors.empty}
-                          barSize={18}
-                          isAnimationActive={false}
-                        />
-                      )}
+                      <Tooltip
+                        content={({ active, payload, label }) => {
+                          const entries =
+                            payload?.filter(
+                              (entry) =>
+                                entry.dataKey !== "placeholder" &&
+                                Number(entry.value) > 0,
+                            ) ?? [];
+                          if (!active || entries.length === 0) return null;
+
+                          return (
+                            <div
+                              className={`rounded-md border px-3 py-2 text-xs shadow ${isNight ? "border-warm-taupe bg-coffee text-warm-ivory" : "border-taupe-dark bg-warm-ivory text-olive"}`}>
+                              <p className="mb-1 font-semibold">{label}</p>
+                              {entries.map((entry) => (
+                                <p key={String(entry.name)}>
+                                  {entry.name}: {Number(entry.value).toFixed(1)}h
+                                </p>
+                              ))}
+                            </div>
+                          );
+                        }}
+                        cursor={{
+                          fill: isNight ? "#8a7e73" : "#e8e0d8",
+                          opacity: 0.35,
+                        }}
+                      />
+                      <Bar
+                        dataKey="work"
+                        name="Work"
+                        fill={weeklyColors.work}
+                        barSize={18}
+                        stackId="daily-hours"
+                      />
+                      <Bar
+                        dataKey="rest"
+                        name="Rest"
+                        fill={weeklyColors.rest}
+                        barSize={18}
+                        stackId="daily-hours"
+                        radius={[3, 3, 0, 0]}
+                      />
+                      <Bar
+                        dataKey="placeholder"
+                        name="No schedule"
+                        fill={weeklyColors.empty}
+                        barSize={18}
+                        stackId="daily-hours"
+                        isAnimationActive={false}
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
                 <p
                   className={`mt-1 text-[11px] sm:text-xs ${isNight ? "text-warm-taupe" : "text-olive"}`}>
                   {hasWeeklySchedule
-                    ? "Repeats your daily schedule. Rest combines Personal, Health, and unscheduled sleep time."
+                    ? "Bars appear on the day task data was entered. Rest combines Personal, Health, and unscheduled sleep time."
                     : "Placeholder bars indicate no scheduled task data; they are not hours."}
                 </p>
               </div>
