@@ -107,9 +107,7 @@ const ProductivityPage = () => {
       day: daysOfWeek[index],
       work: entry.work,
       rest: hasSchedule
-        ? entry.personal +
-          entry.health +
-          Math.max(0, 24 - entry.scheduled)
+        ? entry.personal + entry.health + Math.max(0, 24 - entry.scheduled)
         : 0,
       placeholder: hasSchedule ? 0 : 18,
       hasSchedule,
@@ -476,7 +474,8 @@ const ProductivityPage = () => {
                               <p className="mb-1 font-semibold">{label}</p>
                               {entries.map((entry) => (
                                 <p key={String(entry.name)}>
-                                  {entry.name}: {Number(entry.value).toFixed(1)}h
+                                  {entry.name}: {Number(entry.value).toFixed(1)}
+                                  h
                                 </p>
                               ))}
                             </div>
