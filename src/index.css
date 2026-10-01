@@ -16,6 +16,21 @@
   --color-coffee: #4a382e;
 }
 
+.home-hero {
+  background-image: var(--hero-background-desktop);
+  background-position: center;
+  background-size: cover;
+}
+
+@media (max-width: 767px) {
+  .home-hero {
+    height: calc(100dvh - 4.25rem);
+    background-image: var(--hero-background-mobile);
+    background-position: center;
+    background-size: cover;
+  }
+}
+
 @keyframes warning-signal {
   0%,
   100% {

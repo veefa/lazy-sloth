@@ -1,19 +1,21 @@
 import React from "react";
-import slothBackground from "../assets/sloth-background.png";
+import slothBackground from "../assets/d8cec3.png";
+import slothBackgroundSmall from "../assets/sloyj-mobile.png";
 
 const Home: React.FC = () => {
   return (
     <main
       id="home"
-      className="relative flex h-dvh flex-col overflow-hidden bg-warm-taupe bg-no-repeat  md:pl-48"
-      style={{
-        backgroundImage: `url(${slothBackground})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}>
+      className="home-hero relative flex h-dvh flex-col overflow-hidden bg-warm-taupe bg-no-repeat md:pl-48"
+      style={
+        {
+          "--hero-background-desktop": `url(${slothBackground})`,
+          "--hero-background-mobile": `url(${slothBackgroundSmall})`,
+        } as React.CSSProperties
+      }>
       {/* Background overlay */}
 
-        {/* Content */}
+      {/* Content */}
       <div className="relative z-10 flex min-h-full flex-col items-start justify-center pt-50">
         <p className="my-0.5 flex items-center gap-4 whitespace-nowrap font-mono text-lg font-semibold text-olive-500">
           <span>Plan</span>
