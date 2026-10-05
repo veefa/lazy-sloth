@@ -17,10 +17,11 @@ function AppRoutes() {
   return (
     <NotificationProvider>
       <div className="App">
-        {pathname !== "/login" && <Navbar />}
+        {pathname !== "/login" && pathname !== "/register" && <Navbar />}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<LoginPage />} />
           <Route path="/lazy-schedule" element={<LazySchedulePage />} />
           <Route path="/productivity" element={<ProductivityPage />} />
           <Route path="/calendar" element={<CalendarPage />} />

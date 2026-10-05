@@ -87,7 +87,7 @@ const links: { to: string; label: string; icon: IconName }[] = [
   { to: "/tasks-manager", label: "TaskManager", icon: "tasksmanager" },
 ];
 
-const logLink = { to: "/log", label: "Log", icon: "log" as IconName };
+const logLink = { to: "/login", label: "Sign in", icon: "log" as IconName };
 
 const utilityLinks: { to: string; label: string; icon: IconName }[] = [
   { to: "/settings", label: "Settings", icon: "settings" },
@@ -236,7 +236,7 @@ const Navbar: React.FC = () => {
         </div>
         {menuOpen && (
           <div className="mt-4 flex flex-col gap-2 border-t border-taupe-400 pt-3 font-semibold">
-            {[...links, logLink, ...utilityLinks].map(({ to, label }) => (
+            {[...links, ...utilityLinks].map(({ to, label }) => (
               <Link
                 key={label}
                 to={to}
@@ -245,6 +245,12 @@ const Navbar: React.FC = () => {
                 {label}
               </Link>
             ))}
+            <Link
+              to={logLink.to}
+              className="rounded px-3 py-2 text-taupe-700 hover:bg-taupe-400"
+              onClick={closeMobileMenu}>
+              Sign in
+            </Link>
           </div>
         )}
       </nav>

@@ -1,61 +1,46 @@
-# React + TypeScript + Vite
+# Lazy Schedule
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Lazy Schedule is a React time-planning app built around a 24-hour FaceClock. Add tasks to the clock, adjust their time blocks, and manage them from the task manager and calendar views.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Create and schedule tasks on the FaceClock
+- Drag and resize task time blocks
+- Organize tasks by category
+- Mark tasks complete or delete them
+- Persist tasks in browser local storage
+- View saved tasks in a calendar overview
 
-## React Compiler
+## Routes
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- `/` Home
+- `/login` Sign-in UI preview (not functional)
+- `/register` Registration UI preview (not functional)
+- `/lazy-schedule` FaceClock schedule
+- `/calendar` Calendar
+- `/tasks-manager` Task manager
+- `/productivity` Productivity
+- `/settings` Settings
 
-## Expanding the ESLint configuration
+All pages are accessible during development. Authentication is not implemented; the login and registration screens are visual previews only. Their fields and actions are disabled, and no credentials are collected or sent. Authentication and account-based access controls can be added later.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Getting started
 
-```js
-export default defineConfig([
-  # Lazy Schedule
+```bash
+npm install
+npm run dev
+```
 
-  Lazy Schedule is a React time-planning app built around a 24-hour FaceClock. Add tasks to the clock, adjust their time blocks, and manage them from the task manager and calendar views.
+Open the local URL shown by Vite.
 
-  ## Features
+## Commands
 
-  - Create and schedule tasks on the FaceClock
-  - Drag and resize task time blocks
-  - Organize tasks by category
-  - Mark tasks complete or delete them
-  - Persist tasks in browser local storage
-  - View saved tasks in a calendar overview
+```bash
+npm run build    # Type-check and create a production build
+npm run lint     # Run ESLint
+npm run preview  # Preview the production build
+```
 
-  ## Routes
+## Stack
 
-  - `/` Home
-  - `/lazy-schedule` FaceClock schedule
-  - `/calendar` Calendar
-  - `/tasks-manager` Task manager
-  - `/productivity` Productivity
-
-  ## Getting Started
-
-  ```bash
-  npm install
-  npm run dev
-  ```
-
-  Open the local URL shown by Vite.
-
-  ## Commands
-
-  ```bash
-  npm run build    # Type-check and create a production build
-  npm run lint     # Run ESLint
-  npm run preview  # Preview the production build
-  ```
-
-  ## Stack
-
-  React, TypeScript, Vite, React Router, and Tailwind CSS.
-      reactX.configs['recommended-typescript'],
+React, TypeScript, Vite, React Router, and Tailwind CSS.

@@ -1,21 +1,12 @@
-import { useState, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import slothBackground from "../assets/sloth-background-small.png";
 import { useTheme } from "../features/themeHooks";
 
 const LoginPage = () => {
   const { theme, toggleTheme } = useTheme();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const location = useLocation();
+  const isRegistering = location.pathname === "/register";
   const isNight = theme === "night";
-
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setMessage(
-      "Sign-in is not connected yet. Your details have not been sent.",
-    );
-  };
 
   return (
     <main
@@ -71,17 +62,23 @@ const LoginPage = () => {
           </div>
 
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-terracotta">
-            Welcome back
+            {isRegistering ? "Get started" : "Welcome back"}
           </p>
           <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">
-            Sign in to continue
+            {isRegistering ? "Create your account" : "Sign in to continue"}
           </h1>
           <p
             className={`mt-3 text-sm leading-6 ${isNight ? "text-warm-taupe" : "text-olive"}`}>
-            Pick up where you left off and make a little space for what matters.
+            {isRegistering
+              ? "Create an account to save your plans and make a little space for what matters."
+              : "Pick up where you left off and make a little space for what matters."}
           </p>
 
-          <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
+          <p className="mt-5 rounded-lg border border-terracotta/40 bg-terracotta/10 p-3 text-sm text-terracotta" role="status">
+            Preview only: authentication is not connected. These fields are disabled; no account will be created and no details are collected.
+          </p>
+
+          <form className="mt-8 space-y-5">
             <label className="block">
               <span className="mb-2 block text-sm font-medium">
                 Email address
@@ -90,57 +87,86 @@ const LoginPage = () => {
                 autoComplete="email"
                 className={`h-12 w-full rounded-lg border px-4 outline-none transition focus:border-terracotta focus:ring-2 focus:ring-terracotta/25 ${isNight ? "border-warm-taupe/25 bg-coffee/40 text-warm-ivory placeholder:text-warm-taupe/60" : "border-olive/20 bg-white text-coffee placeholder:text-olive/50"}`}
                 name="email"
-                onChange={(event) => setEmail(event.target.value)}
+                autoCapitalize="none"
+                autoCorrect="off"
+                disabled
                 placeholder="you@example.com"
                 required
                 type="email"
-                value={email}
               />
             </label>
 
             <label className="block">
               <span className="mb-2 block text-sm font-medium">Password</span>
               <input
-                autoComplete="current-password"
+                autoComplete={isRegistering ? "new-password" : "current-password"}
                 className={`h-12 w-full rounded-lg border px-4 outline-none transition focus:border-terracotta focus:ring-2 focus:ring-terracotta/25 ${isNight ? "border-warm-taupe/25 bg-coffee/40 text-warm-ivory placeholder:text-warm-taupe/60" : "border-olive/20 bg-white text-coffee placeholder:text-olive/50"}`}
                 name="password"
-                onChange={(event) => setPassword(event.target.value)}
-                placeholder="Enter your password"
+                minLength={isRegistering ? 8 : undefined}
+                disabled
+                placeholder={isRegistering ? "At least 8 characters" : "Enter your password"}
                 required
                 type="password"
-                value={password}
               />
             </label>
 
-            <button
-              className="flex h-12 w-full items-center justify-center rounded-lg bg-terracotta px-5 font-semibold text-warm-ivory transition hover:bg-terracotta/90 focus:outline-none focus:ring-2 focus:ring-terracotta focus:ring-offset-2"
-              type="submit">
-              Sign in
-            </button>
-            {message && (
-              <p className="text-sm text-terracotta" role="status">
-                {message}
-              </p>
+            {isRegistering && (
+              <label className="block">
+                <span className="mb-2 block text-sm font-medium">
+                  Confirm password
+                </span>
+                <input
+                  autoComplete="new-password"
+                  className={`h-12 w-full rounded-lg border px-4 outline-none transition focus:border-terracotta focus:ring-2 focus:ring-terracotta/25 ${isNight ? "border-warm-taupe/25 bg-coffee/40 text-warm-ivory placeholder:text-warm-taupe/60" : "border-olive/20 bg-white text-coffee placeholder:text-olive/50"}`}
+                  name="confirmPassword"
+                  disabled
+                  placeholder="Re-enter your password"
+                  required
+                  type="password"
+                />
+              </label>
             )}
+
+            <button
+              className="flex h-12 w-full items-center justify-center rounded-lg bg-terracotta px-5 font-semibold text-warm-ivory opacity-60"
+              disabled
+              type="submit">
+              {isRegistering ? "Create account" : "Sign in"}
+            </button>
           </form>
+
+          <div className="my-5 flex items-center gap-3">
+            <div className={`h-px flex-1 ${isNight ? "bg-warm-taupe/20" : "bg-olive/15"}`} />
+            <span className={`text-xs ${isNight ? "text-warm-taupe" : "text-olive"}`}>
+              OR
+            </span>
+            <div className={`h-px flex-1 ${isNight ? "bg-warm-taupe/20" : "bg-olive/15"}`} />
+          </div>
+          <button
+            className={`flex h-12 w-full items-center justify-center rounded-lg border px-5 font-semibold opacity-60 ${isNight ? "border-warm-taupe/25" : "border-olive/20"}`}
+            disabled
+            type="button">
+            Google sign-in (coming later)
+          </button>
 
           <div
             className={`my-7 border-t ${isNight ? "border-warm-taupe/20" : "border-olive/15"}`}
           />
           <p
             className={`text-center text-sm ${isNight ? "text-warm-taupe" : "text-olive"}`}>
-            New to Lazy Schedule?{" "}
-            <a
+            {isRegistering ? "Already have an account? " : "New to Lazy Schedule? "}
+            <Link
+              to={isRegistering ? "/login" : "/register"}
               className="font-semibold text-terracotta underline decoration-terracotta/40 underline-offset-4 hover:decoration-terracotta"
-              href="mailto:hello@lazyschedule.app?subject=Create%20an%20account">
-              Create an account
-            </a>
+            >
+              {isRegistering ? "Sign in" : "Create an account"}
+            </Link>
           </p>
         </div>
 
         <footer
           className={`text-center text-xs ${isNight ? "text-warm-taupe/70" : "text-olive/65"}`}>
-          By continuing, you agree to keep your plans yours.
+          Authentication is not active in this development build.
         </footer>
       </section>
     </main>
