@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNotifications } from "../features/notificationHooks";
 import { useTheme } from "../features/themeHooks";
+import slothLogo from "../assets/Logo/sloth-face.png";
+import slothWordmark from "../assets/Logo/sleepy-sloth-body.png";
 
 type IconName =
   | "schedule"
@@ -10,7 +12,6 @@ type IconName =
   | "productivity"
   | "settings"
   | "help"
-  | "log"
   | "bell";
 
 const SidebarIcon: React.FC<{ name: IconName }> = ({ name }) => {
@@ -64,12 +65,6 @@ const SidebarIcon: React.FC<{ name: IconName }> = ({ name }) => {
           <path d="M12 16h.01" />
         </>
       )}
-      {name === "log" && (
-        <>
-          <circle cx="12" cy="8" r="3" />
-          <path d="M6 20c.5-3.3 2.5-5 6-5s5.5 1.7 6 5" />
-        </>
-      )}
       {name === "bell" && (
         <>
           <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5" />
@@ -87,7 +82,7 @@ const links: { to: string; label: string; icon: IconName }[] = [
   { to: "/tasks-manager", label: "TaskManager", icon: "tasksmanager" },
 ];
 
-const logLink = { to: "/login", label: "Sign in", icon: "log" as IconName };
+const signInLink = { to: "/login", label: "Sign in" };
 
 const utilityLinks: { to: string; label: string; icon: IconName }[] = [
   { to: "/settings", label: "Settings", icon: "settings" },
@@ -110,8 +105,13 @@ const Navbar: React.FC = () => {
               to="/#home"
               aria-label="Home"
               title="Home"
-              className="flex h-16 w-16 items-center justify-center rounded-lg border border-dashed border-terracotta bg-olive font-bold text-warm-ivory text-lg">
-              LS
+              className="flex h-16 w-16 items-center justify-center rounded-lg border border-coffee/20 bg-warm-ivory p-1">
+              <img
+                src={slothLogo}
+                alt=""
+                className="h-full w-full object-contain"
+                style={{ filter: "sepia(0.12) saturate(0.82)" }}
+              />
             </Link>
             <nav
               aria-label="Primary navigation"
@@ -183,11 +183,16 @@ const Navbar: React.FC = () => {
           </div>
 
           <Link
-            to={logLink.to}
-            aria-label={logLink.label}
-            title={logLink.label}
-            className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-warm-ivory text-warm-ivory transition hover:bg-olive hover:text-terracotta focus:outline-none focus:ring-2 focus:ring-olive">
-            <SidebarIcon name={logLink.icon} />
+            to={signInLink.to}
+            aria-label={signInLink.label}
+            title={signInLink.label}
+            className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-coffee/30 bg-warm-ivory transition hover:bg-taupe-light focus:outline-none focus:ring-2 focus:ring-warm-ivory">
+            <img
+              src={slothLogo}
+              alt=""
+              className="h-8 w-8 rounded-full object-contain"
+              style={{ filter: "sepia(0.12) saturate(0.82)" }}
+            />
           </Link>
         </div>
       </aside>
@@ -199,7 +204,12 @@ const Navbar: React.FC = () => {
             to="/#home"
             className="font-bold text-olive text-xl"
             onClick={closeMobileMenu}>
-            Lazy Schedule
+            <img
+              src={slothWordmark}
+              alt="Lazy Schedule"
+              className="h-10 w-32 object-contain object-left"
+              style={{ filter: "sepia(0.08) saturate(0.8)" }}
+            />
           </Link>
           <div className="flex items-center gap-2">
             <button
@@ -246,7 +256,7 @@ const Navbar: React.FC = () => {
               </Link>
             ))}
             <Link
-              to={logLink.to}
+              to={signInLink.to}
               className="rounded px-3 py-2 text-taupe-700 hover:bg-taupe-400"
               onClick={closeMobileMenu}>
               Sign in
