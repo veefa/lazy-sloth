@@ -1,5 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import slothBackground from "../assets/sloth-background-small.png";
+import slothLogo from "../assets/Logo/sloth-face.png";
+import slothWordmark from "../assets/Logo/sleepy-sloth-body.png";
 import { useTheme } from "../features/themeHooks";
 
 const LoginPage = () => {
@@ -20,23 +22,39 @@ const LoginPage = () => {
         <div className="absolute inset-0 bg-coffee/35" />
         <div className="relative z-10 flex w-full items-end justify-between gap-4 text-warm-ivory">
           <div>
-            <Link to="/" className="text-lg font-semibold">
-              Lazy Schedule
+            <Link to="/" aria-label="Lazy Schedule home" className="inline-block">
+              <img
+                src={slothWordmark}
+                alt="Lazy Schedule"
+                className="h-12 w-36 object-contain object-left"
+                style={{ filter: "sepia(0.08) saturate(0.8)" }}
+              />
             </Link>
             <p className="mt-2 max-w-sm text-sm text-warm-ivory/85 sm:text-base">
               A little more room for the day you actually want.
             </p>
           </div>
-          <span className="hidden h-12 w-12 shrink-0 items-center justify-center rounded-full border border-warm-ivory/60 font-semibold sm:flex">
-            LS
-          </span>
+          <img
+            src={slothLogo}
+            alt=""
+            className="hidden h-12 w-12 shrink-0 rounded-full object-contain sm:block"
+            style={{ filter: "sepia(0.12) saturate(0.82)" }}
+          />
         </div>
       </aside>
 
       <section className="flex min-h-[calc(100dvh-14rem)] flex-col px-6 py-6 sm:px-10 sm:py-8 lg:min-h-dvh lg:px-12 lg:py-10">
         <header className="flex items-center justify-between">
-          <Link to="/" className="font-semibold text-olive lg:invisible">
-            Lazy Schedule
+          <Link
+            to="/"
+            aria-label="Lazy Schedule home"
+            className="inline-block lg:invisible">
+            <img
+              src={slothWordmark}
+              alt="Lazy Schedule"
+              className="h-10 w-32 object-contain object-left"
+              style={{ filter: "sepia(0.08) saturate(0.8)" }}
+            />
           </Link>
           <button
             type="button"
@@ -49,9 +67,12 @@ const LoginPage = () => {
 
         <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center py-10">
           <div className="mb-8 flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-olive text-sm font-semibold text-warm-ivory">
-              LS
-            </span>
+            <img
+              src={slothLogo}
+              alt=""
+              className="h-11 w-11 shrink-0 rounded-full object-contain"
+              style={{ filter: "sepia(0.12) saturate(0.82)" }}
+            />
             <div>
               <p className="text-sm font-semibold">Your workspace</p>
               <p

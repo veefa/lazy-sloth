@@ -105,7 +105,7 @@ const Navbar: React.FC = () => {
               to="/#home"
               aria-label="Home"
               title="Home"
-              className="flex h-16 w-16 items-center justify-center rounded-lg border border-coffee/20 bg-warm-ivory p-1">
+              className="flex h-16 w-16 items-center justify-center">
               <img
                 src={slothLogo}
                 alt=""

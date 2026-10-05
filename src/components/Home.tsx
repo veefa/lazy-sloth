@@ -25,7 +25,8 @@ const Home: React.FC = () => {
           <span>Track</span>
         </p>
 
-        <h1 className="my-5 text-7xl font-bold text-olive-600 sm:text-8xl">
+        <h1 className="my-5 flex items-center gap-3 text-7xl font-bold text-olive-600 sm:gap-5 sm:text-8xl">
+        
           Lazy Schedule
         </h1>
 
