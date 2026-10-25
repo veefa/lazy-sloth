@@ -13,11 +13,12 @@ import { NotificationProvider } from "./features/notificationCenter";
 
 function AppRoutes() {
   const { pathname } = useLocation();
+  const isAuthPage = pathname === "/login" || pathname === "/register";
 
   return (
     <NotificationProvider>
       <div className="App">
-        {pathname !== "/login" && pathname !== "/register" && <Navbar />}
+        {!isAuthPage && <Navbar />}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />

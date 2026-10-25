@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { useNotifications } from "../features/notificationHooks";
 import { useTheme } from "../features/themeHooks";
 import slothLogo from "../assets/Logo/sloth-face.png";
-import slothWordmark from "../assets/Logo/sleepy-sloth-body.png";
+import mainLogo from "../assets/Logo/mainLogo.svg";
+import sleepingSloth from "../assets/Logo/sleepy-sloth-body.svg";
 
 type IconName =
   | "schedule"
@@ -88,7 +89,10 @@ const utilityLinks: { to: string; label: string; icon: IconName }[] = [
   { to: "/settings", label: "Settings", icon: "settings" },
 ];
 
-const Navbar: React.FC = () => {
+const Navbar: React.FC<{
+  mobileOnly?: boolean;
+  hideMobileNotifications?: boolean;
+}> = ({ mobileOnly = false, hideMobileNotifications = false }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const { unreadCount, panelOpen, openPanel, closePanel } = useNotifications();
@@ -98,7 +102,7 @@ const Navbar: React.FC = () => {
   return (
     <>
       {/* Desktop left navigation */}
-      <aside className="hidden md:fixed md:inset-y-0 md:left-0 md:z-50 md:flex md:w-24 md:flex-col md:items-center md:border-r md:border-warm-taupe md:bg-terracotta md:shadow-xl">
+      <aside className={mobileOnly ? "hidden" : "hidden md:fixed md:inset-y-0 md:left-0 md:z-50 md:flex md:w-24 md:flex-col md:items-center md:border-r md:border-warm-taupe md:bg-terracotta md:shadow-xl"}>
         <div className="flex h-screen w-full flex-col items-center justify-between py-5">
           <div className="flex flex-col items-center gap-4">
             <Link
@@ -107,8 +111,8 @@ const Navbar: React.FC = () => {
               title="Home"
               className="flex h-16 w-16 items-center justify-center">
               <img
-                src={slothLogo}
-                alt=""
+                src={mainLogo}
+                alt="Lazy Sloth"
                 className="h-full w-full object-contain"
                 style={{ filter: "sepia(0.12) saturate(0.82)" }}
               />
@@ -186,11 +190,11 @@ const Navbar: React.FC = () => {
             to={signInLink.to}
             aria-label={signInLink.label}
             title={signInLink.label}
-            className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-coffee/30 bg-warm-ivory transition hover:bg-taupe-light focus:outline-none focus:ring-2 focus:ring-warm-ivory">
+            className="flex h-12 w-12 items-center justify-center transition focus:outline-none focus:ring-2 focus:ring-warm-ivory">
             <img
               src={slothLogo}
               alt=""
-              className="h-8 w-8 rounded-full object-contain"
+              className="h-8 w-8 object-contain"
               style={{ filter: "sepia(0.12) saturate(0.82)" }}
             />
           </Link>
@@ -198,32 +202,34 @@ const Navbar: React.FC = () => {
       </aside>
 
       {/* Compact navigation for mobile */}
-      <nav className="w-full bg-taupe-300 px-5 py-4 shadow md:hidden">
+      <nav
+        className={`sticky top-3 z-40 mx-3 w-auto rounded-2xl border border-white/60 bg-white/35 px-5 py-3 shadow-lg shadow-coffee/10 backdrop-blur-xl backdrop-saturate-150 ${mobileOnly ? "" : "md:hidden"}`}>
         <div className="flex items-center justify-between gap-3">
           <Link
             to="/#home"
             className="font-bold text-olive text-xl"
             onClick={closeMobileMenu}>
             <img
-              src={slothWordmark}
-              alt="Lazy Schedule"
-              className="h-10 w-32 object-contain object-left"
-              style={{ filter: "sepia(0.08) saturate(0.8)" }}
+              src={sleepingSloth}
+              alt="Sleeping sloth"
+              className="h-10 w-24 object-contain object-left"
             />
           </Link>
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => (panelOpen ? closePanel() : openPanel())}
-              aria-label="Open notifications"
-              className={`relative flex h-9 w-9 items-center justify-center rounded-full bg-olive text-warm-ivory focus:outline-none focus:ring-2 focus:ring-olive ${shouldAnimateBell ? "motion-safe:animate-[bell-ring_0.7s_ease-in-out_infinite]" : ""}`}>
-              <SidebarIcon name="bell" />
-              {unreadCount > 0 && (
-                <span className="absolute -right-1 -top-1 inline-flex min-h-4 min-w-4 items-center justify-center rounded-full bg-terracotta px-1 text-[9px] font-bold text-warm-ivory">
-                  {unreadCount > 9 ? "9+" : unreadCount}
-                </span>
-              )}
-            </button>
+            {!hideMobileNotifications && (
+              <button
+                type="button"
+                onClick={() => (panelOpen ? closePanel() : openPanel())}
+                aria-label="Open notifications"
+                className={`relative flex h-9 w-9 items-center justify-center rounded-full bg-olive text-warm-ivory focus:outline-none focus:ring-2 focus:ring-olive ${shouldAnimateBell ? "motion-safe:animate-[bell-ring_0.7s_ease-in-out_infinite]" : ""}`}>
+                <SidebarIcon name="bell" />
+                {unreadCount > 0 && (
+                  <span className="absolute -right-1 -top-1 inline-flex min-h-4 min-w-4 items-center justify-center rounded-full bg-terracotta px-1 text-[9px] font-bold text-warm-ivory">
+                    {unreadCount > 9 ? "9+" : unreadCount}
+                  </span>
+                )}
+              </button>
+            )}
             <button
               className="text-taupe-700 focus:outline-none"
               onClick={() => setMenuOpen((isOpen) => !isOpen)}
@@ -245,19 +251,19 @@ const Navbar: React.FC = () => {
           </div>
         </div>
         {menuOpen && (
-          <div className="mt-4 flex flex-col gap-2 border-t border-taupe-400 pt-3 font-semibold">
+          <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] flex flex-col gap-2 rounded-2xl border border-white/60 bg-white/70 p-3 font-semibold shadow-xl shadow-coffee/15 backdrop-blur-xl backdrop-saturate-150">
             {[...links, ...utilityLinks].map(({ to, label }) => (
               <Link
                 key={label}
                 to={to}
-                className="rounded px-3 py-2 text-taupe-700 hover:bg-taupe-400 "
+                className="rounded-lg px-3 py-2 text-coffee transition hover:bg-white/40"
                 onClick={closeMobileMenu}>
                 {label}
               </Link>
             ))}
             <Link
               to={signInLink.to}
-              className="rounded px-3 py-2 text-taupe-700 hover:bg-taupe-400"
+              className="rounded-lg px-3 py-2 text-coffee transition hover:bg-white/40"
               onClick={closeMobileMenu}>
               Sign in
             </Link>
