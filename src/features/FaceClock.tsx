@@ -4,6 +4,8 @@ import TimeBlockArc from "./TimeBlockArc";
 import { useTheme } from "./themeHooks";
 import slothFaceDay from "../assets/Logo/sloth-face.png";
 import slothFaceNight from "../assets/Logo/sloth-face-round-night.png";
+import sleepingSlothDay from "../assets/Logo/sleepingSloth-day.svg";
+import sleepingSlothNight from "../assets/Logo/sleepy-sloth-night.png";
 import {
   addTask,
   categories,
@@ -271,92 +273,100 @@ const FaceClock: React.FC = () => {
               </p>
             </div>
           )}
-          <div
-            className={`rounded-lg border border-warm-taupe p-3 ${isNight ? "bg-olive text-warm-ivory" : "bg-taupe-light text-olive"}`}>
-            <h2 className="mb-2 font-semibold">Add a task</h2>
-            <p
-              className={`mb-2 text-xs ${isNight ? "text-warm-taupe" : "text-olive"}`}>
-              {scheduledHours.toFixed(1)} hours scheduled today
-            </p>
-            <div className="grid gap-2 sm:grid-cols-2">
-              <label className="grid gap-1 text-xs font-semibold uppercase tracking-wide">
-                Task name
-                <input
-                  type="text"
-                  placeholder="What needs doing?"
-                  className={`rounded border border-warm-taupe px-2 py-1 normal-case tracking-normal ${isNight ? "bg-coffee text-warm-ivory" : "bg-warm-ivory text-coffee"}`}
-                  value={newTask.name}
-                  onChange={(event) =>
-                    setNewTask((task) => ({
-                      ...task,
-                      name: event.target.value,
-                    }))
-                  }
-                />
-              </label>
-              <label className="grid gap-1 text-xs font-semibold uppercase tracking-wide">
-                Category
-                <select
-                  className={`rounded border border-warm-taupe px-2 py-1 normal-case tracking-normal ${isNight ? "bg-coffee text-warm-ivory" : "bg-warm-ivory text-olive"}`}
-                  value={newTask.category}
-                  onChange={(event) =>
-                    setNewTask((task) => ({
-                      ...task,
-                      category: event.target.value as Category,
-                    }))
-                  }>
-                  {Object.keys(categories).map((category) => (
-                    <option key={category}>{category}</option>
-                  ))}
-                </select>
-              </label>
-              <label className="grid gap-1 text-xs font-semibold uppercase tracking-wide">
-                Start time
-                <input
-                  type="number"
-                  step="0.25"
-                  min="0"
-                  max="23.75"
-                  aria-label="Start time"
-                  className={`rounded border border-warm-taupe px-2 py-1 normal-case tracking-normal ${isNight ? "bg-coffee text-warm-ivory" : "bg-warm-ivory text-olive"}`}
-                  value={newTask.startHour}
-                  onChange={(event) =>
-                    setNewTask((task) => ({
-                      ...task,
-                      startHour: Number(event.target.value),
-                    }))
-                  }
-                />
-              </label>
-              <label className="grid gap-1 text-xs font-semibold uppercase tracking-wide">
-                End time
-                <input
-                  type="number"
-                  step="0.25"
-                  min="0"
-                  max="23.75"
-                  aria-label="End time"
-                  className={`rounded border border-warm-taupe px-2 py-1 normal-case tracking-normal ${isNight ? "bg-coffee text-warm-ivory" : "bg-warm-ivory text-olive"}`}
-                  value={newTask.endHour}
-                  onChange={(event) =>
-                    setNewTask((task) => ({
-                      ...task,
-                      endHour: Number(event.target.value),
-                    }))
-                  }
-                />
-              </label>
+          <div className="relative mt-10">
+            <img
+              src={isNight ? sleepingSlothNight : sleepingSlothDay}
+              alt=""
+              aria-hidden="true"
+              className="absolute left-1/4 -top-7 z-10 h-16 w-auto -translate-x-1/2 -translate-y-1/2 object-contain"
+            />
+            <div
+              className={`rounded-lg border border-warm-taupe p-3 ${isNight ? "bg-olive text-warm-ivory" : "bg-taupe-light text-olive"}`}>
+              <h2 className="mb-2 font-semibold">Add a task</h2>
+              <p
+                className={`mb-2 text-xs ${isNight ? "text-warm-taupe" : "text-olive"}`}>
+                {scheduledHours.toFixed(1)} hours scheduled today
+              </p>
+              <div className="grid gap-2 sm:grid-cols-2">
+                <label className="grid gap-1 text-xs font-semibold uppercase tracking-wide">
+                  Task name
+                  <input
+                    type="text"
+                    placeholder="What needs doing?"
+                    className={`rounded border border-warm-taupe px-2 py-1 normal-case tracking-normal ${isNight ? "bg-coffee text-warm-ivory" : "bg-warm-ivory text-coffee"}`}
+                    value={newTask.name}
+                    onChange={(event) =>
+                      setNewTask((task) => ({
+                        ...task,
+                        name: event.target.value,
+                      }))
+                    }
+                  />
+                </label>
+                <label className="grid gap-1 text-xs font-semibold uppercase tracking-wide">
+                  Category
+                  <select
+                    className={`rounded border border-warm-taupe px-2 py-1 normal-case tracking-normal ${isNight ? "bg-coffee text-warm-ivory" : "bg-warm-ivory text-olive"}`}
+                    value={newTask.category}
+                    onChange={(event) =>
+                      setNewTask((task) => ({
+                        ...task,
+                        category: event.target.value as Category,
+                      }))
+                    }>
+                    {Object.keys(categories).map((category) => (
+                      <option key={category}>{category}</option>
+                    ))}
+                  </select>
+                </label>
+                <label className="grid gap-1 text-xs font-semibold uppercase tracking-wide">
+                  Start time
+                  <input
+                    type="number"
+                    step="0.25"
+                    min="0"
+                    max="23.75"
+                    aria-label="Start time"
+                    className={`rounded border border-warm-taupe px-2 py-1 normal-case tracking-normal ${isNight ? "bg-coffee text-warm-ivory" : "bg-warm-ivory text-olive"}`}
+                    value={newTask.startHour}
+                    onChange={(event) =>
+                      setNewTask((task) => ({
+                        ...task,
+                        startHour: Number(event.target.value),
+                      }))
+                    }
+                  />
+                </label>
+                <label className="grid gap-1 text-xs font-semibold uppercase tracking-wide">
+                  End time
+                  <input
+                    type="number"
+                    step="0.25"
+                    min="0"
+                    max="23.75"
+                    aria-label="End time"
+                    className={`rounded border border-warm-taupe px-2 py-1 normal-case tracking-normal ${isNight ? "bg-coffee text-warm-ivory" : "bg-warm-ivory text-olive"}`}
+                    value={newTask.endHour}
+                    onChange={(event) =>
+                      setNewTask((task) => ({
+                        ...task,
+                        endHour: Number(event.target.value),
+                      }))
+                    }
+                  />
+                </label>
+              </div>
+              <button
+                type="button"
+                onClick={handleAddTask}
+                disabled={
+                  !newTask.name.trim() ||
+                  durationFor(newTask.startHour, newTask.endHour) === 0
+                }
+                className="mt-3 w-full rounded bg-terracotta px-4 py-2 font-medium text-warm-ivory transition-colors hover:bg-coffee disabled:cursor-not-allowed disabled:opacity-50">
+                Add Task
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={handleAddTask}
-              disabled={
-                !newTask.name.trim() ||
-                durationFor(newTask.startHour, newTask.endHour) === 0
-              }
-              className="mt-3 w-full rounded bg-terracotta px-4 py-2 font-medium text-warm-ivory transition-colors hover:bg-coffee disabled:cursor-not-allowed disabled:opacity-50">
-              Add Task
-            </button>
           </div>
         </section>
       </div>
