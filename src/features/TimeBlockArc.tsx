@@ -7,6 +7,7 @@ interface TimeBlockArcProps {
   centerX: number;
   centerY: number;
   color: string;
+  separatorColor: string;
   opacity?: number;
   selected?: boolean;
   onPointerDown?: (event: React.PointerEvent<SVGPathElement>) => void;
@@ -19,6 +20,7 @@ const TimeBlockArc: React.FC<TimeBlockArcProps> = ({
   centerX,
   centerY,
   color,
+  separatorColor,
   opacity = 0.5,
   selected = false,
   onPointerDown,
@@ -36,8 +38,8 @@ const TimeBlockArc: React.FC<TimeBlockArcProps> = ({
       d={`M ${centerX},${centerY} L ${x1},${y1} A ${radius},${radius} 0 ${duration > 12 ? 1 : 0} 1 ${x2},${y2} Z`}
       fill={color}
       opacity={opacity}
-      stroke={selected ? "#1e3a8a" : "transparent"}
-      strokeWidth={selected ? 3 : 0}
+      stroke={selected ? "#1e3a8a" : separatorColor}
+      strokeWidth={selected ? 3 : 2}
       className="cursor-grab active:cursor-grabbing"
       onPointerDown={onPointerDown}
     />

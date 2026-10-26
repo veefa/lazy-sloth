@@ -136,6 +136,35 @@ const FaceClock: React.FC = () => {
     0,
   );
   const isOverloaded = scheduledHours > 22;
+  const taskLayouts = tasks.map((task, index) => {
+    const arcRadius = 170 - index * 12;
+    const duration = durationFor(task.startHour, task.endHour);
+    const middleHour = normalizeHour(task.startHour + duration / 2);
+    const middleAngle = (middleHour * 15 - 90) * (Math.PI / 180);
+    const angleSpan = duration * (Math.PI / 12);
+    const requiredLabelWidth = task.name.length * 6.5 + 4;
+    const labelRadius = Math.min(
+      arcRadius - 10,
+      Math.max(arcRadius * 0.55, requiredLabelWidth / angleSpan),
+    );
+    const fontSize = Math.max(
+      8,
+      Math.min(
+        11,
+        (labelRadius * angleSpan) / (Math.max(task.name.length, 1) * 0.62),
+      ),
+    );
+    return {
+      task,
+      arcRadius,
+      middleAngle,
+      endAngle: (task.endHour * 15 - 90) * (Math.PI / 180),
+      labelX: centerX + Math.cos(middleAngle) * labelRadius,
+      labelY: centerY + Math.sin(middleAngle) * labelRadius,
+      fontSize,
+      isSelected: task.id === selectedTaskId,
+    };
+  });
 
   return (
     <div className="mx-auto w-full max-w-6xl pt-6">
@@ -156,64 +185,66 @@ const FaceClock: React.FC = () => {
             stroke={CLOCK_STROKE}
             strokeWidth="7"
           />
-          {[...Array(24)].map((_, i) => {
-            const angle = (i / 24) * 2 * Math.PI;
-            return (
-              <text
-                key={i}
-                x={centerX + radius * 0.94 * Math.sin(angle)}
-                y={centerY - radius * 0.94 * Math.cos(angle)}
-                textAnchor="middle"
-                dominantBaseline="middle"
-                fontWeight={i % 6 === 0 ? "bold" : "normal"}
-                fontSize={i % 6 === 0 ? 15 : 11}
-                fill={CLOCK_STROKE}>
-                {i}
-              </text>
-            );
-          })}
+          {taskLayouts.map(({ task, arcRadius, isSelected }) => (
+            <TimeBlockArc
+              key={task.id}
+              startHour={task.startHour}
+              endHour={task.endHour}
+              radius={arcRadius}
+              centerX={centerX}
+              centerY={centerY}
+              color={categories[task.category]}
+              separatorColor={CLOCK_FACE}
+              opacity={0.46}
+              selected={isSelected}
+              onPointerDown={(event) => startDrag(event, task)}
+            />
+          ))}
           <g stroke={CLOCK_TICK} strokeWidth="2">
             {Array.from({ length: 24 }).map((_, i) => {
               const angle = (i * Math.PI) / 12 - Math.PI / 2;
               return (
                 <line
                   key={i}
-                  x1={centerX + Math.cos(angle) * 150}
-                  y1={centerY + Math.sin(angle) * 150}
+                  x1={centerX + Math.cos(angle) * 154}
+                  y1={centerY + Math.sin(angle) * 154}
                   x2={centerX + Math.cos(angle) * 170}
                   y2={centerY + Math.sin(angle) * 170}
                 />
               );
             })}
           </g>
-          {tasks.map((task, index) => {
-            const arcRadius = 170 - index * 12;
-            const duration = durationFor(task.startHour, task.endHour);
-            const middleHour = normalizeHour(task.startHour + duration / 2);
-            const middleAngle = (middleHour * 15 - 90) * (Math.PI / 180);
-            const endAngle = (task.endHour * 15 - 90) * (Math.PI / 180);
-            const isSelected = task.id === selectedTaskId;
+          {[...Array(24)].map((_, i) => {
+            const angle = (i * Math.PI) / 12 - Math.PI / 2;
             return (
+              <text
+                key={i}
+                x={centerX + Math.cos(angle) * 181}
+                y={centerY + Math.sin(angle) * 181}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fontWeight="600"
+                fontSize="12"
+                fill={CLOCK_STROKE}>
+                {i}
+              </text>
+            );
+          })}
+          {taskLayouts.map(
+            ({ task, labelX, labelY, fontSize, arcRadius, endAngle, isSelected }) => (
               <React.Fragment key={task.id}>
-                <TimeBlockArc
-                  startHour={task.startHour}
-                  endHour={task.endHour}
-                  radius={arcRadius}
-                  centerX={centerX}
-                  centerY={centerY}
-                  color={categories[task.category]}
-                  opacity={0.58}
-                  selected={isSelected}
-                  onPointerDown={(event) => startDrag(event, task)}
-                />
                 <text
-                  x={centerX + Math.cos(middleAngle) * radius * 0.4}
-                  y={centerY + Math.sin(middleAngle) * radius * 0.4}
+                  x={labelX}
+                  y={labelY}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  fontSize="13"
+                  fontSize={fontSize}
                   fontWeight="bold"
                   fill={taskTextColor}
+                  stroke={CLOCK_FACE}
+                  strokeWidth="3"
+                  paintOrder="stroke"
+                  strokeLinejoin="round"
                   pointerEvents="none">
                   {task.name}
                 </text>
@@ -230,8 +261,8 @@ const FaceClock: React.FC = () => {
                   />
                 )}
               </React.Fragment>
-            );
-          })}
+            ),
+          )}
           <ClockHand
             angle={hourAngle}
             length={100}
@@ -250,10 +281,10 @@ const FaceClock: React.FC = () => {
           />
           <image
             href={isNight ? slothFaceNight : slothFaceDay}
-            x={centerX - 18}
-            y={centerY - 18}
-            width="36"
-            height="36"
+            x={centerX - 21}
+            y={centerY - 21}
+            width="42"
+            height="42"
             preserveAspectRatio="xMidYMid meet"
             pointerEvents="none"
           />
