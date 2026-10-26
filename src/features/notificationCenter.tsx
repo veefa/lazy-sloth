@@ -140,9 +140,10 @@ const NotificationPanel = () => {
   );
 };
 
-export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const NotificationProvider: React.FC<{
+  children: React.ReactNode;
+  showPopups?: boolean;
+}> = ({ children, showPopups = true }) => {
   const tasks = useTasks();
   const { preferences } = useNotificationPreferences();
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
@@ -177,8 +178,17 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
       return [notification, ...current];
     });
 
-    setToast(notification);
+    if (showPopups) {
+      setToast(notification);
+    }
   };
+
+  useEffect(() => {
+    if (!showPopups) {
+      setPanelOpen(false);
+      setToast(null);
+    }
+  }, [showPopups]);
 
   useEffect(() => {
     const scheduledHours = tasks.reduce(
@@ -245,7 +255,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
     if (!breakActive) {
       triggeredRef.current.break = false;
     }
-  }, [preferences, tasks]);
+  }, [preferences, tasks, showPopups]);
 
   useEffect(() => {
     if (!toast) return;
@@ -286,7 +296,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
   return (
     <NotificationContext.Provider value={value}>
       {children}
-      {toast && (
+      {showPopups && toast && (
         <div className="fixed right-5 bottom-5 z-60 w-[320px] rounded-2xl border border-terracotta bg-olive p-4 text-warm-ivory shadow-xl">
           <div className="flex items-start justify-between gap-3">
             <div>
@@ -325,7 +335,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
           )}
         </div>
       )}
-      {panelOpen && <NotificationPanel />}
+      {showPopups && panelOpen && <NotificationPanel />}
     </NotificationContext.Provider>
   );
 };

@@ -16,7 +16,7 @@ function AppRoutes() {
   const isAuthPage = pathname === "/login" || pathname === "/register";
 
   return (
-    <NotificationProvider>
+    <NotificationProvider showPopups={!isAuthPage}>
       <div className="App">
         {!isAuthPage && <Navbar />}
         <Routes>

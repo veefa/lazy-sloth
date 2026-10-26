@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
-import slothBackground from "../assets/sloth-background-small.png";
+import slothBackground from "../assets/sloth-background.png";
+import mainLogo from "../assets/Logo/mainLogo.svg";
 import sleepingSloth from "../assets/Logo/sleepy-sloth-body.svg";
 const LoginPage = () => {
   const location = useLocation();
@@ -9,20 +10,20 @@ const LoginPage = () => {
   return (
     <main
       className="relative isolate flex min-h-dvh flex-col text-coffee lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
-      <div className="fixed inset-0 z-0">
+      <div className="fixed inset-0 z-0 bg-warm-taupe">
         <img
           src={slothBackground}
           alt=""
-          className="absolute inset-0 h-full w-full object-cover object-center"
+          className="absolute inset-0 h-full w-full object-contain object-center"
         />
         <div className="absolute inset-0 bg-coffee/30" />
       </div>
 
-      <aside className="relative z-10 hidden lg:order-2 lg:flex lg:min-h-dvh lg:items-end lg:px-14 lg:py-12">
+      <aside className="relative z-10 hidden lg:order-2 lg:col-start-2 lg:row-start-1 lg:flex lg:min-h-dvh lg:items-end lg:px-14 lg:py-12">
         
       </aside>
 
-      <section className="relative z-10 order-1 flex min-h-[calc(100dvh-14rem)] flex-col bg-warm-ivory/90 px-6 py-6 shadow-2xl shadow-coffee/10 backdrop-blur-md sm:px-10 sm:py-8 lg:order-1 lg:my-4 lg:ml-4 lg:min-h-[calc(100dvh-2rem)] lg:rounded-3xl lg:px-12 lg:py-8">
+      <section className="relative z-10 order-1 flex min-h-[calc(100dvh-14rem)] flex-1 flex-col bg-warm-ivory/90 px-6 py-6 shadow-2xl shadow-coffee/10 backdrop-blur-md sm:px-10 sm:py-8 lg:order-1 lg:col-start-1 lg:row-start-1 lg:my-4 lg:ml-4 lg:min-h-[calc(100dvh-2rem)] lg:rounded-3xl lg:px-12 lg:py-8">
         <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center py-10 lg:max-w-sm lg:py-4">
           <div className="mb-8 flex items-center gap-3 lg:mb-6">
             <Link to="/" aria-label="Go to Home" className="inline-flex shrink-0">
@@ -135,6 +136,70 @@ const LoginPage = () => {
           Authentication is not active in this development build.
         </footer>
       </section>
+
+      <footer className="relative z-10 order-3 bg-terracotta px-6 py-10 text-warm-taupe sm:px-10 lg:col-span-2 lg:row-start-2 lg:px-16 lg:py-12">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr]">
+            <div>
+              <Link
+                to="/"
+                aria-label="Lazy Schedule home"
+                className="inline-flex items-center">
+                <img
+                  src={mainLogo}
+                  alt="Lazy Schedule"
+                  className="h-12 w-36 object-contain object-left"
+                />
+              </Link>
+              <p className="mt-4 max-w-xs font-serif text-2xl font-semibold leading-tight">
+                Planning for people, not productivity machines.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-xs uppercase tracking-wide text-warm-taupe">
+                Product
+              </h2>
+              <ul className="mt-3 space-y-2 text-sm text-warm-ivory/85">
+                <li><Link to="/lazy-schedule" className="hover:text-white">Schedule</Link></li>
+                <li><Link to="/calendar" className="hover:text-white">Calendar</Link></li>
+                <li><Link to="/productivity" className="hover:text-white">Productivity</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h2 className="text-xs uppercase tracking-wide text-warm-taupe">
+                Company
+              </h2>
+              <ul className="mt-3 space-y-2 text-sm text-warm-ivory/85">
+                <li><Link to="/" className="hover:text-white">Our story</Link></li>
+                <li><Link to="/tasks-manager" className="hover:text-white">Tasks</Link></li>
+                <li><Link to="/settings" className="hover:text-white">Settings</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h2 className="text-xs uppercase tracking-wide text-warm-taupe">
+                Follow along
+              </h2>
+              <ul className="mt-3 space-y-2 text-sm text-warm-ivory/85">
+                <li>Instagram</li>
+                <li>Pinterest</li>
+                <li>Newsletter</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="mt-10 flex flex-col gap-4 border-t border-warm-ivory/15 pt-6 text-xs text-warm-taupe sm:flex-row sm:items-center sm:justify-between lg:mt-14 lg:pt-8">
+            <p>© {new Date().getFullYear()} Lazy Schedule. Take your time.</p>
+            <div className="flex gap-5">
+              <span>Privacy</span>
+              <span>Terms</span>
+              <span>Accessibility</span>
+            </div>
+          </div>
+        </div>
+      </footer>
     </main>
   );
 };

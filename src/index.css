@@ -24,10 +24,7 @@
 
 @media (max-width: 767px) {
   .home-hero {
-    height: calc(100dvh - 4.25rem);
-    background-image: var(--hero-background-mobile);
-    background-position: center;
-    background-size: cover;
+    background-image: none;
   }
 }
 

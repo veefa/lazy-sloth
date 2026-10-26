@@ -25,7 +25,7 @@ const SidebarIcon: React.FC<{ name: IconName }> = ({ name }) => {
   };
 
   return (
-    <svg className="h-7 w-7" viewBox="0 0 24 24" aria-hidden="true" {...common}>
+    <svg className="h-6 w-6" viewBox="0 0 24 24" aria-hidden="true" {...common}>
       {name === "schedule" && (
         <>
           <circle cx="12" cy="12" r="8" />
@@ -103,53 +103,46 @@ const Navbar: React.FC<{
     <>
       {/* Desktop left navigation */}
       <aside className={mobileOnly ? "hidden" : "hidden md:fixed md:inset-y-0 md:left-0 md:z-50 md:flex md:w-24 md:flex-col md:items-center md:border-r md:border-warm-taupe md:bg-terracotta md:shadow-xl"}>
-        <div className="flex h-screen w-full flex-col items-center justify-between py-5">
-          <div className="flex flex-col items-center gap-4">
-            <Link
-              to="/#home"
-              aria-label="Home"
-              title="Home"
-              className="flex h-16 w-16 items-center justify-center">
-              <img
-                src={mainLogo}
-                alt="Lazy Sloth"
-                className="h-full w-full object-contain"
-                style={{ filter: "sepia(0.12) saturate(0.82)" }}
-              />
-            </Link>
-            <nav
-              aria-label="Primary navigation"
-              className="flex flex-col items-center gap-4">
-              {links.map(({ to, label, icon }) => (
-                <Link
-                  key={label}
-                  to={to}
-                  aria-label={label}
-                  title={label}
-                  className="flex h-12 w-12 items-center justify-center rounded-lg text-warm-ivory transition hover:bg-olive hover:text-terracotta focus:outline-none focus:ring-2 focus:ring-olive-600">
-                  <SidebarIcon name={icon} />
-                </Link>
-              ))}
-            </nav>
-          </div>
+        <div className="flex h-screen w-full flex-col items-center py-5">
+          <Link
+            to="/#home"
+            aria-label="Home"
+            title="Home"
+            className="flex h-24 w-28 translate-x-3 -translate-y-1 items-center justify-center">
+            <img
+              src={mainLogo}
+              alt="Lazy Sloth"
+              className="h-full w-full object-contain"
+              style={{ filter: "sepia(0.12) saturate(0.82)" }}
+            />
+          </Link>
 
-          <div className="flex w-full flex-col items-center gap-4">
-            <div className="w-[80%] border-t border-olive pb-2" />
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => (panelOpen ? closePanel() : openPanel())}
-                aria-label="Open notifications"
-                title="Notifications"
-                className={`relative flex h-12 w-12 items-center justify-center rounded-lg text-warm-ivory transition hover:bg-olive hover:text-terracotta focus:outline-none focus:ring-2 focus:ring-warm-ivory ${shouldAnimateBell ? "motion-safe:animate-[bell-ring_0.7s_ease-in-out_infinite]" : ""}`}>
-                <SidebarIcon name="bell" />
-                {unreadCount > 0 && (
-                  <span className="absolute -right-1 -top-1 inline-flex min-h-5 min-w-5 items-center justify-center rounded-full bg-terracotta px-1 text-[10px] font-bold text-warm-ivory">
-                    {unreadCount > 9 ? "9+" : unreadCount}
-                  </span>
-                )}
-              </button>
-            </div>
+          <nav
+            aria-label="Primary navigation"
+            className="flex flex-1 flex-col items-center justify-evenly py-10">
+            {links.map(({ to, label, icon }) => (
+              <Link
+                key={label}
+                to={to}
+                aria-label={label}
+                title={label}
+                className="flex h-12 w-12 items-center justify-center rounded-lg text-warm-ivory transition hover:bg-olive hover:text-terracotta focus:outline-none focus:ring-2 focus:ring-olive-600">
+                <SidebarIcon name={icon} />
+              </Link>
+            ))}
+            <button
+              type="button"
+              onClick={() => (panelOpen ? closePanel() : openPanel())}
+              aria-label="Open notifications"
+              title="Notifications"
+              className={`relative flex h-12 w-12 items-center justify-center rounded-lg text-warm-ivory transition hover:bg-olive hover:text-terracotta focus:outline-none focus:ring-2 focus:ring-warm-ivory ${shouldAnimateBell ? "motion-safe:animate-[bell-ring_0.7s_ease-in-out_infinite]" : ""}`}>
+              <SidebarIcon name="bell" />
+              {unreadCount > 0 && (
+                <span className="absolute -right-1 -top-1 inline-flex min-h-5 min-w-5 items-center justify-center rounded-full bg-terracotta px-1 text-[10px] font-bold text-warm-ivory">
+                  {unreadCount > 9 ? "9+" : unreadCount}
+                </span>
+              )}
+            </button>
             <button
               type="button"
               onClick={toggleTheme}
@@ -170,9 +163,11 @@ const Navbar: React.FC<{
                 )}
               </svg>
             </button>
-            <nav
-              aria-label="Utility navigation"
-              className="flex flex-col items-center gap-4">
+          </nav>
+
+          <div className="flex w-full flex-col items-center gap-4">
+            <div className="w-[80%] border-t border-olive pb-40" />
+            <nav aria-label="Utility navigation" className="flex flex-col items-center gap-4">
               {utilityLinks.map(({ to, label, icon }) => (
                 <Link
                   key={label}
@@ -184,20 +179,19 @@ const Navbar: React.FC<{
                 </Link>
               ))}
             </nav>
+            <Link
+              to={signInLink.to}
+              aria-label={signInLink.label}
+              title={signInLink.label}
+              className="flex h-12 w-12 items-center justify-center transition focus:outline-none focus:ring-2 focus:ring-warm-ivory">
+              <img
+                src={slothLogo}
+                alt=""
+                className="h-8 w-8 object-contain"
+                style={{ filter: "sepia(0.12) saturate(0.82)" }}
+              />
+            </Link>
           </div>
-
-          <Link
-            to={signInLink.to}
-            aria-label={signInLink.label}
-            title={signInLink.label}
-            className="flex h-12 w-12 items-center justify-center transition focus:outline-none focus:ring-2 focus:ring-warm-ivory">
-            <img
-              src={slothLogo}
-              alt=""
-              className="h-8 w-8 object-contain"
-              style={{ filter: "sepia(0.12) saturate(0.82)" }}
-            />
-          </Link>
         </div>
       </aside>
 
