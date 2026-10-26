@@ -189,7 +189,7 @@ const Navbar: React.FC = () => {
 
       {/* Compact navigation for mobile */}
       <nav
-        className="sticky top-3 z-40 mx-3 w-auto rounded-2xl border border-white/60 bg-white/35 px-5 py-3 shadow-lg shadow-coffee/10 backdrop-blur-xl backdrop-saturate-150 md:hidden">
+        className="sticky top-0 z-40 mx-0 w-full rounded-none border-x-0 border-t-0 border-b border-warm-taupe/70 bg-warm-taupe/75 px-5 py-3 shadow-lg shadow-coffee/10 backdrop-blur-xl backdrop-saturate-150 md:hidden">
         <div className="flex items-center justify-between gap-3">
           <Link
             to="/#home"

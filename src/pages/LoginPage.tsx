@@ -15,11 +15,11 @@ const LoginPage = () => {
   return (
     <main
       className="relative isolate flex min-h-dvh flex-col text-coffee lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
-      <div className="fixed inset-0 z-0 bg-warm-taupe">
+      <div className="fixed inset-0 z-8 bg-warm-taupe">
         <img
           src={slothBackground}
           alt=""
-          className="absolute inset-0 h-full w-full object-contain object-center"
+          className="login-background-image absolute left-1/2 top-1/2 h-auto w-auto max-h-full max-w-full -translate-x-1/2 -translate-y-1/2 object-contain"
         />
         <div className="absolute inset-0 bg-coffee/30" />
       </div>

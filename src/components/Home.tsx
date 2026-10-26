@@ -1,5 +1,5 @@
 import React from "react";
-import slothBackground from "../assets/sloth-background.png";
+import slothBackground from "../assets/sloth-background1.png";
 
 const Home: React.FC = () => {
   return (
@@ -14,7 +14,11 @@ const Home: React.FC = () => {
       <img
         src={slothBackground}
         alt=""
-        className="mx-auto h-[clamp(9rem,28dvh,15rem)] w-full object-contain md:hidden"
+        className="home-background-image pointer-events-none absolute top-0 right-0 z-0 h-[clamp(12rem,38dvh,20rem)] w-full object-contain object-right md:hidden"
+      />
+      <div
+        aria-hidden="true"
+        className="h-[clamp(12rem,38dvh,20rem)] md:hidden"
       />
 
       <div className="relative z-10 mx-auto flex w-full max-w-3xl flex-1 flex-col items-start justify-start px-5 py-5 sm:px-8 md:mx-0 md:justify-center md:px-0 md:pt-50">
