@@ -1,10 +1,15 @@
 import { Link, useLocation } from "react-router-dom";
 import slothBackground from "../assets/sloth-background.png";
-import mainLogo from "../assets/Logo/mainLogo.svg";
-import sleepingSloth from "../assets/Logo/sleepy-sloth-body.svg";
+import mainLogoDay from "../assets/Logo/mainLogo-day.svg";
+import mainLogoNight from "../assets/Logo/mainLogo-night.svg";
+import sleepingSlothDay from "../assets/Logo/sleepingSloth-day.svg";
+import { useTheme } from "../features/themeHooks";
+
 const LoginPage = () => {
   const location = useLocation();
   const isRegistering = location.pathname === "/register";
+  const { theme } = useTheme();
+  const mainLogo = theme === "night" ? mainLogoNight : mainLogoDay;
 
 
   return (
@@ -19,16 +24,12 @@ const LoginPage = () => {
         <div className="absolute inset-0 bg-coffee/30" />
       </div>
 
-      <aside className="relative z-10 hidden lg:order-2 lg:col-start-2 lg:row-start-1 lg:flex lg:min-h-dvh lg:items-end lg:px-14 lg:py-12">
-        
-      </aside>
-
       <section className="relative z-10 order-1 flex min-h-[calc(100dvh-14rem)] flex-1 flex-col bg-warm-ivory/90 px-6 py-6 shadow-2xl shadow-coffee/10 backdrop-blur-md sm:px-10 sm:py-8 lg:order-1 lg:col-start-1 lg:row-start-1 lg:my-4 lg:ml-4 lg:min-h-[calc(100dvh-2rem)] lg:rounded-3xl lg:px-12 lg:py-8">
         <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center py-10 lg:max-w-sm lg:py-4">
           <div className="mb-8 flex items-center gap-3 lg:mb-6">
             <Link to="/" aria-label="Go to Home" className="inline-flex shrink-0">
               <img
-                src={sleepingSloth}
+                src={sleepingSlothDay}
                 alt="Sleeping sloth"
                 className="h-14 w-34 object-contain"
               />
@@ -137,7 +138,7 @@ const LoginPage = () => {
         </footer>
       </section>
 
-      <footer className="relative z-10 order-3 bg-terracotta px-6 py-10 text-warm-taupe sm:px-10 lg:col-span-2 lg:row-start-2 lg:px-16 lg:py-12">
+      <footer className="relative z-10 order-3 bg-coffee px-6 py-10 text-warm-taupe sm:px-10 lg:col-span-2 lg:row-start-2 lg:px-16 lg:py-12">
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr]">
             <div>

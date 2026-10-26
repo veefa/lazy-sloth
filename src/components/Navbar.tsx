@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNotifications } from "../features/notificationHooks";
 import { useTheme } from "../features/themeHooks";
-import slothLogo from "../assets/Logo/sloth-face.png";
-import mainLogo from "../assets/Logo/mainLogo.svg";
-import sleepingSloth from "../assets/Logo/sleepy-sloth-body.svg";
+import slothFaceDay from "../assets/Logo/sloth-face.png";
+import mainLogoDay from "../assets/Logo/mainLogo-day.svg";
+import sleepingSlothDay from "../assets/Logo/sleepingSloth-day.svg";
+import sleepingSlothNight from "../assets/Logo/sleepy-sloth-night.png";
 
 type IconName =
   | "schedule"
@@ -12,7 +13,6 @@ type IconName =
   | "calendar"
   | "productivity"
   | "settings"
-  | "help"
   | "bell";
 
 const SidebarIcon: React.FC<{ name: IconName }> = ({ name }) => {
@@ -59,13 +59,6 @@ const SidebarIcon: React.FC<{ name: IconName }> = ({ name }) => {
           />
         </>
       )}
-      {name === "help" && (
-        <>
-          <circle cx="12" cy="12" r="8" />
-          <path d="M9.8 9a2.3 2.3 0 1 1 3.5 2c-.8.5-1.3 1-1.3 2" />
-          <path d="M12 16h.01" />
-        </>
-      )}
       {name === "bell" && (
         <>
           <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5" />
@@ -89,12 +82,11 @@ const utilityLinks: { to: string; label: string; icon: IconName }[] = [
   { to: "/settings", label: "Settings", icon: "settings" },
 ];
 
-const Navbar: React.FC<{
-  mobileOnly?: boolean;
-  hideMobileNotifications?: boolean;
-}> = ({ mobileOnly = false, hideMobileNotifications = false }) => {
+const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const isNight = theme === "night";
+  const sleepingSloth = isNight ? sleepingSlothNight : sleepingSlothDay;
   const { unreadCount, panelOpen, openPanel, closePanel } = useNotifications();
   const closeMobileMenu = () => setMenuOpen(false);
   const shouldAnimateBell = unreadCount > 0 && !panelOpen;
@@ -102,7 +94,7 @@ const Navbar: React.FC<{
   return (
     <>
       {/* Desktop left navigation */}
-      <aside className={mobileOnly ? "hidden" : "hidden md:fixed md:inset-y-0 md:left-0 md:z-50 md:flex md:w-24 md:flex-col md:items-center md:border-r md:border-warm-taupe md:bg-terracotta md:shadow-xl"}>
+      <aside className="hidden md:fixed md:inset-y-0 md:left-0 md:z-50 md:flex md:w-24 md:flex-col md:items-center md:border-r md:border-warm-taupe md:bg-terracotta md:shadow-xl">
         <div className="flex h-screen w-full flex-col items-center py-5">
           <Link
             to="/#home"
@@ -110,7 +102,7 @@ const Navbar: React.FC<{
             title="Home"
             className="flex h-24 w-28 translate-x-3 -translate-y-1 items-center justify-center">
             <img
-              src={mainLogo}
+              src={mainLogoDay}
               alt="Lazy Sloth"
               className="h-full w-full object-contain"
               style={{ filter: "sepia(0.12) saturate(0.82)" }}
@@ -185,7 +177,7 @@ const Navbar: React.FC<{
               title={signInLink.label}
               className="flex h-12 w-12 items-center justify-center transition focus:outline-none focus:ring-2 focus:ring-warm-ivory">
               <img
-                src={slothLogo}
+                src={slothFaceDay}
                 alt=""
                 className="h-8 w-8 object-contain"
                 style={{ filter: "sepia(0.12) saturate(0.82)" }}
@@ -197,7 +189,7 @@ const Navbar: React.FC<{
 
       {/* Compact navigation for mobile */}
       <nav
-        className={`sticky top-3 z-40 mx-3 w-auto rounded-2xl border border-white/60 bg-white/35 px-5 py-3 shadow-lg shadow-coffee/10 backdrop-blur-xl backdrop-saturate-150 ${mobileOnly ? "" : "md:hidden"}`}>
+        className="sticky top-3 z-40 mx-3 w-auto rounded-2xl border border-white/60 bg-white/35 px-5 py-3 shadow-lg shadow-coffee/10 backdrop-blur-xl backdrop-saturate-150 md:hidden">
         <div className="flex items-center justify-between gap-3">
           <Link
             to="/#home"
@@ -210,20 +202,18 @@ const Navbar: React.FC<{
             />
           </Link>
           <div className="flex items-center gap-2">
-            {!hideMobileNotifications && (
-              <button
-                type="button"
-                onClick={() => (panelOpen ? closePanel() : openPanel())}
-                aria-label="Open notifications"
-                className={`relative flex h-9 w-9 items-center justify-center rounded-full bg-olive text-warm-ivory focus:outline-none focus:ring-2 focus:ring-olive ${shouldAnimateBell ? "motion-safe:animate-[bell-ring_0.7s_ease-in-out_infinite]" : ""}`}>
-                <SidebarIcon name="bell" />
-                {unreadCount > 0 && (
-                  <span className="absolute -right-1 -top-1 inline-flex min-h-4 min-w-4 items-center justify-center rounded-full bg-terracotta px-1 text-[9px] font-bold text-warm-ivory">
-                    {unreadCount > 9 ? "9+" : unreadCount}
-                  </span>
-                )}
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => (panelOpen ? closePanel() : openPanel())}
+              aria-label="Open notifications"
+              className={`relative flex h-9 w-9 items-center justify-center rounded-full bg-olive text-warm-ivory focus:outline-none focus:ring-2 focus:ring-olive ${shouldAnimateBell ? "motion-safe:animate-[bell-ring_0.7s_ease-in-out_infinite]" : ""}`}>
+              <SidebarIcon name="bell" />
+              {unreadCount > 0 && (
+                <span className="absolute -right-1 -top-1 inline-flex min-h-4 min-w-4 items-center justify-center rounded-full bg-terracotta px-1 text-[9px] font-bold text-warm-ivory">
+                  {unreadCount > 9 ? "9+" : unreadCount}
+                </span>
+              )}
+            </button>
             <button
               className="text-taupe-700 focus:outline-none"
               onClick={() => setMenuOpen((isOpen) => !isOpen)}

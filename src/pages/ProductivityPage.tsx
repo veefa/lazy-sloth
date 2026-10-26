@@ -12,6 +12,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import hisloth from "../assets/Logo/hiSloth-day.png";
 
 type BalanceCategory = "Work" | "Health" | "Rest" | "Personal";
 
@@ -206,8 +207,13 @@ const ProductivityPage = () => {
         <div className="productivity-page__top-row mb-4 grid min-w-0 gap-4 sm:mb-5 sm:gap-5 2xl:mb-8 2xl:gap-8 sm:grid-cols-[minmax(0,0.85fr)_minmax(18rem,1.15fr)]">
           <section
             aria-label="Greeting"
-            className={`productivity-page__greeting-card flex min-h-24 items-center rounded-2xl p-4 sm:min-h-32 sm:p-5 ${isNight ? "bg-olive" : "bg-taupe-light"}`}>
-            <p className="text-xl font-semibold sm:text-2xl">Hi, there!</p>
+            className={`productivity-page__greeting-card relative flex min-h-24 items-center justify-between gap-4 rounded-2xl p-4 sm:min-h-32 sm:p-5 ${isNight ? "bg-olive" : "bg-taupe-light"}`}>
+            <div className="-ml-1 flex h-20 w-20 shrink-0 items-center justify-center sm:-ml-5 sm:h-20 sm:w-20">
+              <img src={hisloth} alt="Hisloth" className="h-full w-full object-contain" />
+            </div>
+            <p className="absolute left-1/3 -translate-x-1/2 text-center text-xl font-semibold sm:text-2xl">
+              Hi, there!
+            </p>
           </section>
 
           <section

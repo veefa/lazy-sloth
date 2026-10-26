@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import ClockHand from "./ClockHands";
 import TimeBlockArc from "./TimeBlockArc";
 import { useTheme } from "./themeHooks";
+import slothFaceDay from "../assets/Logo/sloth-face.png";
+import slothFaceNight from "../assets/Logo/sloth-face-round-night.png";
 import {
   addTask,
   categories,
@@ -244,7 +246,15 @@ const FaceClock: React.FC = () => {
             centerX={centerX}
             centerY={centerY}
           />
-          <circle cx={centerX} cy={centerY} r={7} fill={MINUTE_HAND} />
+          <image
+            href={isNight ? slothFaceNight : slothFaceDay}
+            x={centerX - 18}
+            y={centerY - 18}
+            width="36"
+            height="36"
+            preserveAspectRatio="xMidYMid meet"
+            pointerEvents="none"
+          />
         </svg>
 
         <section
